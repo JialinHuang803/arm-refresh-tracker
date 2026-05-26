@@ -723,7 +723,7 @@
     "service": "Application Insights",
     "armNamespace": "Microsoft.Insights",
     "specFolder": "monitor/Microsoft.Insights",
-    "sdkPackageName": "@azure/arm-appinsights"
+    "sdkPackageName": "@azure/arm-monitor"
   },
   {
     "service": "Azure Log Analytics",
