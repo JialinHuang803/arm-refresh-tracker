@@ -18,6 +18,25 @@
         ·
         <a href="https://github.com/JialinHuang803/arm-refresh-tracker">source</a>
       </p>
+      <div id="stats" class="stats" hidden>
+        <div class="stat stat-headline">
+          <div class="stat-value"><span id="stat-released">0</span><span class="stat-divider">/</span><span id="stat-total">0</span></div>
+          <div class="stat-label">Released <span id="stat-percent" class="stat-percent"></span></div>
+          <div class="progress"><div id="stat-bar" class="progress-bar"></div></div>
+        </div>
+        <div class="stat stat-pill stat-to-release">
+          <span class="stat-value" id="stat-to-release">0</span>
+          <span class="stat-label">To Release</span>
+        </div>
+        <div class="stat stat-pill stat-in-progress">
+          <span class="stat-value" id="stat-in-progress">0</span>
+          <span class="stat-label">In Progress</span>
+        </div>
+        <div class="stat stat-pill stat-not-started">
+          <span class="stat-value" id="stat-not-started">0</span>
+          <span class="stat-label">Not Started</span>
+        </div>
+      </div>
       <div class="filters">
         <label>Release Status:
           <select id="filter-status">

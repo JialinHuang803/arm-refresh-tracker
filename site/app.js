@@ -52,6 +52,22 @@
         "Last refreshed: " + formatTimestamp(payload.generatedAt);
       document.getElementById("rowCount").textContent = rows.length + " packages tracked";
 
+      var counts = { Released: 0, "To Release": 0, "In Progress": 0, "Not Started": 0 };
+      rows.forEach(function (r) {
+        if (counts[r.releaseStatus] !== undefined) counts[r.releaseStatus] += 1;
+      });
+      var total = rows.length;
+      var released = counts.Released;
+      var pct = total ? Math.round((released / total) * 100) : 0;
+      document.getElementById("stat-released").textContent = released;
+      document.getElementById("stat-total").textContent = total;
+      document.getElementById("stat-percent").textContent = "(" + pct + "%)";
+      document.getElementById("stat-bar").style.width = pct + "%";
+      document.getElementById("stat-to-release").textContent = counts["To Release"];
+      document.getElementById("stat-in-progress").textContent = counts["In Progress"];
+      document.getElementById("stat-not-started").textContent = counts["Not Started"];
+      document.getElementById("stats").hidden = false;
+
       populateFilter(document.getElementById("filter-status"), rows.map(function (r) { return r.releaseStatus; }));
       populateFilter(document.getElementById("filter-by"), rows.map(function (r) { return r.releaseBy; }));
 

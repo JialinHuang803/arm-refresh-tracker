@@ -3,6 +3,13 @@ name: Refresh ARM SDK Tracker
 on:
   schedule:
     - cron: "0 6 * * *"   # daily at 06:00 UTC
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/refresh.yml"
+      - "scripts/**"
+      - "data/**"
   workflow_dispatch:
     inputs:
       rebuild_index:

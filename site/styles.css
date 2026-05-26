@@ -123,3 +123,67 @@ a:hover { text-decoration: underline; }
 
 .tag-refresh { background: var(--by-refresh-bg); color: var(--by-refresh-fg); }
 .tag-self-serve { background: var(--by-self-serve-bg); color: var(--by-self-serve-fg); }
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: stretch;
+  margin: 4px 0 12px;
+}
+
+.stat {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-headline { min-width: 220px; flex: 1 1 240px; max-width: 320px; }
+.stat-headline .stat-value {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.stat-headline .stat-divider { color: var(--muted); margin: 0 2px; font-weight: 400; }
+.stat-headline #stat-released { color: var(--status-released-fg); }
+.stat-headline .stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.stat-percent { color: var(--status-released-fg); font-weight: 500; margin-left: 4px; }
+
+.progress {
+  margin-top: 8px;
+  height: 6px;
+  background: #eaeef2;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--status-released-fg);
+  transition: width 320ms ease-out;
+}
+
+.stat-pill {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  min-height: 0;
+}
+.stat-pill .stat-value { font-size: 18px; font-weight: 600; }
+.stat-pill .stat-label { font-size: 12px; color: var(--muted); }
+
+.stat-to-release .stat-value { color: var(--status-to-release-fg); }
+.stat-in-progress .stat-value { color: var(--status-in-progress-fg); }
+.stat-not-started .stat-value { color: var(--status-not-started-fg); }
