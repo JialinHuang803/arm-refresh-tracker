@@ -63,8 +63,12 @@
       document.getElementById("rowCount").textContent = rows.length + " packages tracked";
 
       var counts = { Released: 0, "To Release": 0, "In Progress": 0, "Not Started": 0 };
+      var inProgressByKind = { refresh: 0, "self-serve": 0 };
       rows.forEach(function (r) {
         if (counts[r.releaseStatus] !== undefined) counts[r.releaseStatus] += 1;
+        if (r.releaseStatus === "In Progress" && inProgressByKind[r.releaseBy] !== undefined) {
+          inProgressByKind[r.releaseBy] += 1;
+        }
       });
       var total = rows.length;
       var released = counts.Released;
@@ -75,6 +79,8 @@
       document.getElementById("stat-bar").style.width = pct + "%";
       document.getElementById("stat-to-release").textContent = counts["To Release"];
       document.getElementById("stat-in-progress").textContent = counts["In Progress"];
+      document.getElementById("stat-in-progress-breakdown").textContent =
+        inProgressByKind.refresh + " refresh · " + inProgressByKind["self-serve"] + " self-serve";
       document.getElementById("stat-not-started").textContent = counts["Not Started"];
       document.getElementById("stats").hidden = false;
 

@@ -182,7 +182,8 @@ a:hover { text-decoration: underline; }
   min-height: 0;
 }
 .stat-pill .stat-value { font-size: 18px; font-weight: 600; }
-.stat-pill .stat-label { font-size: 12px; color: var(--muted); }
+.stat-pill .stat-label { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; }
+.stat-pill .stat-sub { font-size: 11px; color: var(--muted); opacity: 0.85; margin-top: 1px; }
 
 .stat-to-release .stat-value { color: var(--status-to-release-fg); }
 .stat-in-progress .stat-value { color: var(--status-in-progress-fg); }
