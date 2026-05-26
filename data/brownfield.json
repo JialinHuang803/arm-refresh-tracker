@@ -1,0 +1,914 @@
+[
+  {
+    "service": "Azure Storage Actions",
+    "armNamespace": "Microsoft.StorageActions",
+    "specFolder": "storageactions",
+    "sdkPackageName": "@azure/arm-storageactions"
+  },
+  {
+    "service": "Bing Search APIs",
+    "armNamespace": "Microsoft.Bing",
+    "specFolder": "bing",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Reservations RP",
+    "armNamespace": "Microsoft.BillingBenefits",
+    "specFolder": "billingbenefits",
+    "sdkPackageName": "@azure/arm-billingbenefits"
+  },
+  {
+    "service": "Azure Device Provisioning Service",
+    "armNamespace": "Microsoft.Devices",
+    "specFolder": "deviceprovisioningservices",
+    "sdkPackageName": "@azure/arm-deviceprovisioningservices"
+  },
+  {
+    "service": "Azure DNS Public Zones",
+    "armNamespace": "Microsoft.Network",
+    "specFolder": "dns",
+    "sdkPackageName": "@azure/arm-dns"
+  },
+  {
+    "service": "Azure Edge Hardware Center",
+    "armNamespace": "Microsoft.EdgeOrder",
+    "specFolder": "edgeorder",
+    "sdkPackageName": "@azure/arm-edgeorder"
+  },
+  {
+    "service": "SRP",
+    "armNamespace": "Microsoft.ElasticSan",
+    "specFolder": "elasticsan",
+    "sdkPackageName": "@azure/arm-elasticsan"
+  },
+  {
+    "service": "Azure Automanage",
+    "armNamespace": "Microsoft.GuestConfiguration",
+    "specFolder": "guestconfiguration",
+    "sdkPackageName": "@azure/arm-guestconfiguration"
+  },
+  {
+    "service": "Azure Dedicated HSM",
+    "armNamespace": "Microsoft.HardwareSecurityModules",
+    "specFolder": "hardwaresecuritymodules",
+    "sdkPackageName": "@azure/arm-hardwaresecuritymodules"
+  },
+  {
+    "service": "Microsoft Diagnostics RP",
+    "armNamespace": "Microsoft.Help",
+    "specFolder": "help",
+    "sdkPackageName": "@azure/arm-selfhelp"
+  },
+  {
+    "service": "Kubernetes Connect Service",
+    "armNamespace": "Microsoft.Kubernetes",
+    "specFolder": "hybridkubernetes",
+    "sdkPackageName": "@azure/arm-hybridkubernetes"
+  },
+  {
+    "service": "Planned Maintenance",
+    "armNamespace": "Microsoft.Maintenance",
+    "specFolder": "maintenance",
+    "sdkPackageName": "@azure/arm-maintenance"
+  },
+  {
+    "service": "Azure Notification Hubs",
+    "armNamespace": "Microsoft.NotificationHubs",
+    "specFolder": "notificationhubs",
+    "sdkPackageName": "@azure/arm-notificationhubs"
+  },
+  {
+    "service": "Azure DNS Private Zones",
+    "armNamespace": "Microsoft.Network",
+    "specFolder": "privatedns",
+    "sdkPackageName": "@azure/arm-privatedns"
+  },
+  {
+    "service": "SQL IaaS",
+    "armNamespace": "Microsoft.SqlVirtualMachine",
+    "specFolder": "sqlvirtualmachine",
+    "sdkPackageName": "@azure/arm-sqlvirtualmachine"
+  },
+  {
+    "service": "Liftr-Confluent",
+    "armNamespace": "Microsoft.Confluent",
+    "specFolder": "confluent",
+    "sdkPackageName": "@azure/arm-confluent"
+  },
+  {
+    "service": "Azure Bot Service",
+    "armNamespace": "Microsoft.BotService",
+    "specFolder": "botservice",
+    "sdkPackageName": "@azure/arm-botservice"
+  },
+  {
+    "service": "Fabric Platform MWC",
+    "armNamespace": "Microsoft.PowerBIdedicated",
+    "specFolder": "powerbidedicated",
+    "sdkPackageName": "@azure/arm-powerbidedicated"
+  },
+  {
+    "service": "Azure Advisor",
+    "armNamespace": "Microsoft.Advisor",
+    "specFolder": "advisor",
+    "sdkPackageName": "@azure/arm-advisor"
+  },
+  {
+    "service": "CDN Management Service",
+    "armNamespace": "Microsoft.Cdn",
+    "specFolder": "cdn",
+    "sdkPackageName": "@azure/arm-cdn"
+  },
+  {
+    "service": "Azure Confidential Computing Ledger",
+    "armNamespace": "Microsoft.ConfidentialLedger",
+    "specFolder": "confidentialledger",
+    "sdkPackageName": "@azure/arm-confidentialledger"
+  },
+  {
+    "service": "DataBox Pod & Disk Service",
+    "armNamespace": "microsoft.databox",
+    "specFolder": "databox",
+    "sdkPackageName": "@azure/arm-databox"
+  },
+  {
+    "service": "Liftr-Datadog",
+    "armNamespace": "microsoft.datadog",
+    "specFolder": "datadog",
+    "sdkPackageName": "@azure/arm-datadog"
+  },
+  {
+    "service": "Backup (MAB)",
+    "armNamespace": "Microsoft.DataProtection",
+    "specFolder": "dataprotection",
+    "sdkPackageName": "@azure/arm-dataprotection"
+  },
+  {
+    "service": "DevCenter",
+    "armNamespace": "Microsoft.DevCenter",
+    "specFolder": "devcenter",
+    "sdkPackageName": "@azure/arm-devcenter"
+  },
+  {
+    "service": "Azure DNS Private Resolver",
+    "armNamespace": "Microsoft.Network",
+    "specFolder": "dnsresolver",
+    "sdkPackageName": "@azure/arm-dnsresolver"
+  },
+  {
+    "service": "Liftr-Elastic",
+    "armNamespace": "Microsoft.Elastic",
+    "specFolder": "elastic",
+    "sdkPackageName": "@azure/arm-elastic"
+  },
+  {
+    "service": "Microsoft Health Agent - HealthBot",
+    "armNamespace": "Microsoft.HealthBot",
+    "specFolder": "healthbot",
+    "sdkPackageName": "@azure/arm-healthbot"
+  },
+  {
+    "service": "Azure Key Vault",
+    "armNamespace": "Microsoft.KeyVault",
+    "specFolder": "keyvault",
+    "sdkPackageName": "@azure/arm-keyvault"
+  },
+  {
+    "service": "Managed Service Identity",
+    "armNamespace": "microsoft.managedidentity",
+    "specFolder": "msi",
+    "sdkPackageName": "@azure/arm-msi"
+  },
+  {
+    "service": "Azure Database for MySQL - Flexible Server",
+    "armNamespace": "microsoft.dbformysql",
+    "specFolder": "mysql",
+    "sdkPackageName": "@azure/arm-mysql-flexible"
+  },
+  {
+    "service": "Liftr-Nginx",
+    "armNamespace": "nginx.nginxplus",
+    "specFolder": "nginx",
+    "sdkPackageName": "@azure/arm-nginx"
+  },
+  {
+    "service": "Azure Cosmos DB for PostgreSQL",
+    "armNamespace": "microsoft.dbforpostgresql",
+    "specFolder": "postgresqlhsc",
+    "sdkPackageName": "@azure/arm-cosmosdbforpostgresql"
+  },
+  {
+    "service": "QuotaManagement",
+    "armNamespace": "Microsoft.Quota",
+    "specFolder": "quota",
+    "sdkPackageName": "@azure/arm-quota"
+  },
+  {
+    "service": "Backup (MAB)",
+    "armNamespace": "microsoft.recoveryservices",
+    "specFolder": "recoveryservicesbackup",
+    "sdkPackageName": "@azure/arm-recoveryservicesbackup"
+  },
+  {
+    "service": "Redis Cache",
+    "armNamespace": "microsoft.cache",
+    "specFolder": "redis",
+    "sdkPackageName": "@azure/arm-rediscache"
+  },
+  {
+    "service": "Service Bus",
+    "armNamespace": "microsoft.relay",
+    "specFolder": "relay",
+    "sdkPackageName": "@azure/arm-relay"
+  },
+  {
+    "service": "Service Bus",
+    "armNamespace": "microsoft.servicebus",
+    "specFolder": "servicebus",
+    "sdkPackageName": "@azure/arm-servicebus"
+  },
+  {
+    "service": "Azure SignalR Service",
+    "armNamespace": "Microsoft.SignalRService",
+    "specFolder": "signalr",
+    "sdkPackageName": "@azure/arm-signalr"
+  },
+  {
+    "service": "SRP",
+    "armNamespace": "microsoft.storage",
+    "specFolder": "storage",
+    "sdkPackageName": "@azure/arm-storage"
+  },
+  {
+    "service": "Azure Storage Mover",
+    "armNamespace": "Microsoft.StorageMover",
+    "specFolder": "storagemover",
+    "sdkPackageName": "@azure/arm-storagemover"
+  },
+  {
+    "service": "Xsync",
+    "armNamespace": "microsoft.storagesync",
+    "specFolder": "storagesync",
+    "sdkPackageName": "@azure/arm-storagesync"
+  },
+  {
+    "service": "Azure Support Case Mgmt",
+    "armNamespace": "microsoft.support",
+    "specFolder": "support",
+    "sdkPackageName": "@azure/arm-support"
+  },
+  {
+    "service": "Azure SignalR Service",
+    "armNamespace": "Microsoft.SignalRService",
+    "specFolder": "webpubsub",
+    "sdkPackageName": "@azure/arm-webpubsub"
+  },
+  {
+    "service": "Compute Recommender",
+    "armNamespace": "Microsoft.Compute",
+    "specFolder": "compute/Recommender",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Liftr-Dynatrace",
+    "armNamespace": "dynatrace.observability",
+    "specFolder": "dynatrace",
+    "sdkPackageName": "@azure/arm-dynatrace"
+  },
+  {
+    "service": "Azure App Configuration",
+    "armNamespace": "Microsoft.AppConfiguration",
+    "specFolder": "appconfiguration",
+    "sdkPackageName": "@azure/arm-appconfiguration"
+  },
+  {
+    "service": "CCM API - Consupmtion",
+    "armNamespace": "microsoft.consumption",
+    "specFolder": "consumption",
+    "sdkPackageName": "@azure/arm-consumption"
+  },
+  {
+    "service": "CCM API - CostManagement",
+    "armNamespace": "microsoft.costmanagement",
+    "specFolder": "cost-management",
+    "sdkPackageName": "@azure/arm-costmanagement"
+  },
+  {
+    "service": "Azure Stack Edge Service",
+    "armNamespace": "microsoft.databoxedge",
+    "specFolder": "databoxedge",
+    "sdkPackageName": "@azure/arm-databoxedge"
+  },
+  {
+    "service": "Service Bus",
+    "armNamespace": "Microsoft.EventHub",
+    "specFolder": "eventhub",
+    "sdkPackageName": "@azure/arm-eventhub"
+  },
+  {
+    "service": "Azure NetApp Files",
+    "armNamespace": "Microsoft.NetApp",
+    "specFolder": "netapp",
+    "sdkPackageName": "@azure/arm-netapp"
+  },
+  {
+    "service": "Network Cloud",
+    "armNamespace": "Microsoft.NetworkCloud",
+    "specFolder": "networkcloud",
+    "sdkPackageName": "@azure/arm-networkcloud"
+  },
+  {
+    "service": "Liftr-Newrelic",
+    "armNamespace": "NewRelic.Observability",
+    "specFolder": "newrelic",
+    "sdkPackageName": "@azure/arm-newrelicobservability"
+  },
+  {
+    "service": "Liftr-PAN",
+    "armNamespace": "PaloAltoNetworks.Cloudngfw",
+    "specFolder": "paloaltonetworks",
+    "sdkPackageName": "@azure/arm-paloaltonetworksngfw"
+  },
+  {
+    "service": "Azure Database for PostgreSQL - Flexible Server",
+    "armNamespace": "microsoft.dbforpostgresql",
+    "specFolder": "postgresql",
+    "sdkPackageName": "@azure/arm-postgresql-flexible"
+  },
+  {
+    "service": "Arc Appliance",
+    "armNamespace": "Microsoft.ResourceConnector",
+    "specFolder": "resourceconnector",
+    "sdkPackageName": "@azure/arm-resourceconnector"
+  },
+  {
+    "service": "WATM (offering: Traffic Manager)",
+    "armNamespace": "Microsoft.Network",
+    "specFolder": "trafficmanager",
+    "sdkPackageName": "@azure/arm-trafficmanager"
+  },
+  {
+    "service": "API Management",
+    "armNamespace": "microsoft.apimanagement",
+    "specFolder": "apimanagement",
+    "sdkPackageName": "@azure/arm-apimanagement"
+  },
+  {
+    "service": "Microsoft Azure Attestation",
+    "armNamespace": "Microsoft.Attestation",
+    "specFolder": "attestation",
+    "sdkPackageName": "@azure/arm-attestation"
+  },
+  {
+    "service": "Azure Batch",
+    "armNamespace": "Microsoft.Batch",
+    "specFolder": "batch",
+    "sdkPackageName": "@azure/arm-batch"
+  },
+  {
+    "service": "Microsoft Foundry RP",
+    "armNamespace": "Microsoft.CognitiveServices",
+    "specFolder": "cognitiveservices",
+    "sdkPackageName": "@azure/arm-cognitiveservices"
+  },
+  {
+    "service": "Azure Container Registry",
+    "armNamespace": "Microsoft.ContainerRegistry",
+    "specFolder": "containerregistry",
+    "sdkPackageName": "@azure/arm-containerregistry"
+  },
+  {
+    "service": "Azure Container Registry",
+    "armNamespace": "Microsoft.ContainerRegistry",
+    "specFolder": "containerregistry",
+    "sdkPackageName": "@azure/arm-containerregistrytasks"
+  },
+  {
+    "service": "Azure Monitor Grafana",
+    "armNamespace": "Microsoft.Dashboard",
+    "specFolder": "dashboard",
+    "sdkPackageName": "@azure/arm-dashboard"
+  },
+  {
+    "service": "AIOps Orchestration",
+    "armNamespace": "Microsoft.HybridNetwork",
+    "specFolder": "hybridnetwork",
+    "sdkPackageName": "@azure/arm-hybridnetwork"
+  },
+  {
+    "service": "Project Vienna Services",
+    "armNamespace": "Microsoft.MachineLearningServices",
+    "specFolder": "machinelearningservices",
+    "sdkPackageName": "@azure/arm-machinelearning"
+  },
+  {
+    "service": "Groups RP",
+    "armNamespace": "Microsoft.Management",
+    "specFolder": "management/Microsoft.Management/ManagementGroups",
+    "sdkPackageName": "@azure/arm-managementgroups"
+  },
+  {
+    "service": "Microsoft Azure Peering Service",
+    "armNamespace": "Microsoft.Peering",
+    "specFolder": "peering",
+    "sdkPackageName": "@azure/arm-peering"
+  },
+  {
+    "service": "Resource Provider Service as a Service",
+    "armNamespace": "Microsoft.ProviderHub",
+    "specFolder": "providerhub",
+    "sdkPackageName": "@azure/arm-providerhub"
+  },
+  {
+    "service": "Redis Enterprise",
+    "armNamespace": "Microsoft.Cache",
+    "specFolder": "redisenterprise",
+    "sdkPackageName": "@azure/arm-redisenterprisecache"
+  },
+  {
+    "service": "Azure Policy",
+    "armNamespace": "Microsoft.Authorization",
+    "specFolder": "resources/Microsoft.Authorization/policy",
+    "sdkPackageName": "@azure/arm-policy"
+  },
+  {
+    "service": "Microsoft Azure Sentinel",
+    "armNamespace": "Microsoft.SecurityInsights",
+    "specFolder": "securityinsights",
+    "sdkPackageName": "@azure/arm-securityinsight"
+  },
+  {
+    "service": "App Service (Web Apps)",
+    "armNamespace": "microsoft.web",
+    "specFolder": "web",
+    "sdkPackageName": "@azure/arm-appservice"
+  },
+  {
+    "service": "App Service (CertificateRegistration)",
+    "armNamespace": "microsoft.web",
+    "specFolder": "web/certificationregistration",
+    "sdkPackageName": "@azure/arm-certificateregistration"
+  },
+  {
+    "service": "App Service (DomainRegistration)",
+    "armNamespace": "microsoft.web",
+    "specFolder": "web/domainregistration",
+    "sdkPackageName": "@azure/arm-domainregistration"
+  },
+  {
+    "service": "Azure Alerts Management",
+    "armNamespace": "Microsoft.AlertsManagement",
+    "specFolder": "alertsmanagement",
+    "sdkPackageName": "@azure/arm-alertsmanagement"
+  },
+  {
+    "service": "Azure Alerts Management",
+    "armNamespace": "Microsoft.AlertsManagement",
+    "specFolder": "alertsmanagement",
+    "sdkPackageName": "@azure/arm-alertprocessingrules"
+  },
+  {
+    "service": "Azure Alerts Management",
+    "armNamespace": "Microsoft.AlertsManagement",
+    "specFolder": "alertsmanagement",
+    "sdkPackageName": "@azure/arm-alertrulerecommendations"
+  },
+  {
+    "service": "Azure Alerts Management",
+    "armNamespace": "Microsoft.AlertsManagement",
+    "specFolder": "alertsmanagement",
+    "sdkPackageName": "@azure/arm-previewalertrule"
+  },
+  {
+    "service": "Azure Alerts Management",
+    "armNamespace": "Microsoft.AlertsManagement",
+    "specFolder": "alertsmanagement",
+    "sdkPackageName": "@azure/arm-prometheusrulegroups"
+  },
+  {
+    "service": "Azure Alerts Management",
+    "armNamespace": "Microsoft.AlertsManagement",
+    "specFolder": "alertsmanagement",
+    "sdkPackageName": "@azure/arm-tenantactivitylogalerts"
+  },
+  {
+    "service": "Azure Stack HCI",
+    "armNamespace": "Microsoft.AzureStackHCI",
+    "specFolder": "azurestackhci",
+    "sdkPackageName": "@azure/arm-azurestackhci"
+  },
+  {
+    "service": "Azure Stack HCI",
+    "armNamespace": "Microsoft.AzureStackHCI",
+    "specFolder": "azurestackhci",
+    "sdkPackageName": "@azure/arm-azurestackhcivm"
+  },
+  {
+    "service": "Usage (Usage V3)",
+    "armNamespace": "Microsoft.Commerce",
+    "specFolder": "commerce",
+    "sdkPackageName": "@azure/arm-commerce"
+  },
+  {
+    "service": "IC3 ACS Resource Provider",
+    "armNamespace": "Microsoft.Communication",
+    "specFolder": "communication",
+    "sdkPackageName": "@azure/arm-communication"
+  },
+  {
+    "service": "Azure Kubernetes Service",
+    "armNamespace": "Microsoft.ContainerService",
+    "specFolder": "containerservice",
+    "sdkPackageName": "@azure/arm-containerservice"
+  },
+  {
+    "service": "Azure Kubernetes Service",
+    "armNamespace": "Microsoft.ContainerService",
+    "specFolder": "containerservice",
+    "sdkPackageName": "@azure/arm-containerserviceaimanager"
+  },
+  {
+    "service": "Azure Kubernetes Service",
+    "armNamespace": "Microsoft.ContainerService",
+    "specFolder": "containerservice",
+    "sdkPackageName": "@azure/arm-containerservicefleet"
+  },
+  {
+    "service": "Azure Kubernetes Service",
+    "armNamespace": "Microsoft.ContainerService",
+    "specFolder": "containerservice",
+    "sdkPackageName": "@azure/arm-containerservicenodecustomization"
+  },
+  {
+    "service": "Azure Kubernetes Service",
+    "armNamespace": "Microsoft.ContainerService",
+    "specFolder": "containerservice",
+    "sdkPackageName": "@azure/arm-containerservicepreparedimagespecification"
+  },
+  {
+    "service": "Azure Kubernetes Service",
+    "armNamespace": "Microsoft.ContainerService",
+    "specFolder": "containerservice",
+    "sdkPackageName": "@azure/arm-containerservicesafeguards"
+  },
+  {
+    "service": "Azure Cosmos DB",
+    "armNamespace": "Microsoft.DocumentDB",
+    "specFolder": "cosmos-db",
+    "sdkPackageName": "@azure/arm-cosmosdb"
+  },
+  {
+    "service": "Azure Data Factory",
+    "armNamespace": "Microsoft.DataFactory",
+    "specFolder": "datafactory",
+    "sdkPackageName": "@azure/arm-datafactory"
+  },
+  {
+    "service": "Azure Event Grid",
+    "armNamespace": "Microsoft.EventGrid",
+    "specFolder": "eventgrid",
+    "sdkPackageName": "@azure/arm-eventgrid"
+  },
+  {
+    "service": "Cluster Configuration - Extensions",
+    "armNamespace": "Microsoft.KubernetesConfiguration",
+    "specFolder": "kubernetesconfiguration",
+    "sdkPackageName": "@azure/arm-kubernetesconfiguration"
+  },
+  {
+    "service": "Cluster Configuration - Extensions",
+    "armNamespace": "Microsoft.KubernetesConfiguration",
+    "specFolder": "kubernetesconfiguration",
+    "sdkPackageName": "@azure/arm-kubernetesconfiguration-extensions"
+  },
+  {
+    "service": "Cluster Configuration - Extensions",
+    "armNamespace": "Microsoft.KubernetesConfiguration",
+    "specFolder": "kubernetesconfiguration",
+    "sdkPackageName": "@azure/arm-kubernetesconfiguration-extensiontypes"
+  },
+  {
+    "service": "Cluster Configuration - Extensions",
+    "armNamespace": "Microsoft.KubernetesConfiguration",
+    "specFolder": "kubernetesconfiguration",
+    "sdkPackageName": "@azure/arm-kubernetesconfiguration-fluxconfigurations"
+  },
+  {
+    "service": "Cluster Configuration - PrivateLinkScopes",
+    "armNamespace": "Microsoft.KubernetesConfiguration",
+    "specFolder": "kubernetesconfiguration",
+    "sdkPackageName": "@azure/arm-kubernetesconfiguration-privatelinkscopes"
+  },
+  {
+    "service": "Azure Maps",
+    "armNamespace": "Microsoft.Maps",
+    "specFolder": "maps",
+    "sdkPackageName": "@azure/arm-maps"
+  },
+  {
+    "service": "CPX-Marketplace-PrivateMarketplace",
+    "armNamespace": "Microsoft.Marketplace",
+    "specFolder": "marketplace",
+    "sdkPackageName": "@azure/arm-marketplace"
+  },
+  {
+    "service": "Purview",
+    "armNamespace": "Microsoft.Purview",
+    "specFolder": "purview",
+    "sdkPackageName": "@azure/arm-purview"
+  },
+  {
+    "service": "Azure Site Recovery",
+    "armNamespace": "Microsoft.RecoveryServices",
+    "specFolder": "recoveryservicessiterecovery",
+    "sdkPackageName": "@azure/arm-recoveryservices-siterecovery"
+  },
+  {
+    "service": "Azure Search",
+    "armNamespace": "Microsoft.Search",
+    "specFolder": "search",
+    "sdkPackageName": "@azure/arm-search"
+  },
+  {
+    "service": "Azure Frontdoor",
+    "armNamespace": "Microsoft.Network",
+    "specFolder": "frontdoor",
+    "sdkPackageName": "@azure/arm-frontdoor"
+  },
+  {
+    "service": "NFV Resource Provider",
+    "armNamespace": "Microsoft.NetworkFunction",
+    "specFolder": "networkfunction",
+    "sdkPackageName": "@azure/arm-networkfunction"
+  },
+  {
+    "service": "Sevice Fabric",
+    "armNamespace": "Microsoft.ServiceFabric",
+    "specFolder": "servicefabric",
+    "sdkPackageName": "@azure/arm-servicefabric"
+  },
+  {
+    "service": "ServiceFabricManagedClusters",
+    "armNamespace": "Microsoft.ServiceFabric",
+    "specFolder": "servicefabricmanagedclusters",
+    "sdkPackageName": "@azure/arm-servicefabricmanagedclusters"
+  },
+  {
+    "service": "Azure Container Apps",
+    "armNamespace": "Microsoft.App",
+    "specFolder": "app",
+    "sdkPackageName": "@azure/arm-appcontainers"
+  },
+  {
+    "service": "Azure Container Apps",
+    "armNamespace": "Microsoft.App",
+    "specFolder": "app",
+    "sdkPackageName": "@azure/arm-sreagent"
+  },
+  {
+    "service": "Application Insights",
+    "armNamespace": "Microsoft.Insights",
+    "specFolder": "applicationinsights",
+    "sdkPackageName": "@azure/arm-appinsights"
+  },
+  {
+    "service": "Azure Privileged Identity Management",
+    "armNamespace": "Microsoft.Authorization",
+    "specFolder": "authorization",
+    "sdkPackageName": "@azure/arm-authorization"
+  },
+  {
+    "service": "Azure Automation",
+    "armNamespace": "Microsoft.Automation",
+    "specFolder": "automation",
+    "sdkPackageName": "@azure/arm-automation"
+  },
+  {
+    "service": "Azure Data Explorer (Kusto)",
+    "armNamespace": "Microsoft.Kusto",
+    "specFolder": "azure-kusto",
+    "sdkPackageName": "@azure/arm-kusto"
+  },
+  {
+    "service": "Billing RP",
+    "armNamespace": "Microsoft.Billing",
+    "specFolder": "billing",
+    "sdkPackageName": "@azure/arm-billing"
+  },
+  {
+    "service": "Azure Container Instances",
+    "armNamespace": "Microsoft.ContainerInstance",
+    "specFolder": "containerinstance",
+    "sdkPackageName": "@azure/arm-containerinstance"
+  },
+  {
+    "service": "Azure Database Migration Service",
+    "armNamespace": "Microsoft.DataMigration",
+    "specFolder": "datamigration",
+    "sdkPackageName": "@azure/arm-datamigration"
+  },
+  {
+    "service": "HDInisight",
+    "armNamespace": "Microsoft.HDInsight",
+    "specFolder": "hdinsight",
+    "sdkPackageName": "@azure/arm-hdinsight"
+  },
+  {
+    "service": "Azure Healthcare APIs",
+    "armNamespace": "Microsoft.HealthcareApis",
+    "specFolder": "healthcareapis",
+    "sdkPackageName": "@azure/arm-healthcareapis"
+  },
+  {
+    "service": "Hybrid Resource Provider",
+    "armNamespace": "Microsoft.HybridCompute",
+    "specFolder": "hybridcompute",
+    "sdkPackageName": "@azure/arm-hybridcompute"
+  },
+  {
+    "service": "Application Insights",
+    "armNamespace": "Microsoft.Insights",
+    "specFolder": "monitor/Microsoft.Insights",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Log Analytics",
+    "armNamespace": "Microsoft.OperationalInsights",
+    "specFolder": "operationalinsights",
+    "sdkPackageName": "@azure/arm-operationalinsights"
+  },
+  {
+    "service": "Azure Policy",
+    "armNamespace": "Microsoft.PolicyInsights",
+    "specFolder": "policyinsights",
+    "sdkPackageName": "@azure/arm-policyinsights"
+  },
+  {
+    "service": "Reservations RP",
+    "armNamespace": "Microsoft.Capacity",
+    "specFolder": "reservations",
+    "sdkPackageName": "@azure/arm-reservations"
+  },
+  {
+    "service": "Azure Resource Graph",
+    "armNamespace": "Microsoft.ResourceGraph",
+    "specFolder": "resourcegraph",
+    "sdkPackageName": "@azure/arm-resourcegraph"
+  },
+  {
+    "service": "Azure Resource Health",
+    "armNamespace": "Microsoft.ResourceHealth",
+    "specFolder": "resourcehealth",
+    "sdkPackageName": "@azure/arm-resourcehealth"
+  },
+  {
+    "service": "Microsoft Defender for Cloud",
+    "armNamespace": "Microsoft.Security",
+    "specFolder": "security",
+    "sdkPackageName": "@azure/arm-security"
+  },
+  {
+    "service": "SQL Control Plane",
+    "armNamespace": "Microsoft.Sql",
+    "specFolder": "sql",
+    "sdkPackageName": "@azure/arm-sql"
+  },
+  {
+    "service": "Avere Azure Storage Cache",
+    "armNamespace": "Microsoft.StorageCache",
+    "specFolder": "storagecache",
+    "sdkPackageName": "@azure/arm-storagecache"
+  },
+  {
+    "service": "CAB provisioning",
+    "armNamespace": "Microsoft.Subscription",
+    "specFolder": "subscription",
+    "sdkPackageName": "@azure/arm-subscriptions"
+  },
+  {
+    "service": "Azure Resource Manager",
+    "armNamespace": "Microsoft.Resources",
+    "specFolder": "resources/Microsoft.Resources/resources",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Hybrid Data",
+    "armNamespace": "Microsoft.AzureArcData",
+    "specFolder": "azurearcdata",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Databricks",
+    "armNamespace": "Microsoft.Databricks",
+    "specFolder": "databricks",
+    "sdkPackageName": "@azure/arm-databricks"
+  },
+  {
+    "service": "AKS Developer Hub",
+    "armNamespace": "Microsoft.DevHub",
+    "specFolder": "developerhub",
+    "sdkPackageName": "@azure/arm-devhub"
+  },
+  {
+    "service": "AAD Domain Services",
+    "armNamespace": "Microsoft.AAD",
+    "specFolder": "domainservices",
+    "sdkPackageName": "@azure/arm-domainservices"
+  },
+  {
+    "service": "Azure for Education",
+    "armNamespace": "Microsoft.Education",
+    "specFolder": "education",
+    "sdkPackageName": "@azure/arm-education"
+  },
+  {
+    "service": "Bare Metal Infrastructure",
+    "armNamespace": "Microsoft.HanaOnAzure",
+    "specFolder": "hanaonazure",
+    "sdkPackageName": "@azure/arm-hanaonazure"
+  },
+  {
+    "service": "Azure VM Image Builder",
+    "armNamespace": "Microsoft.VirtualMachineImages",
+    "specFolder": "imagebuilder",
+    "sdkPackageName": "@azure/arm-imagebuilder"
+  },
+  {
+    "service": "Azure Migrate",
+    "armNamespace": "Microsoft.OffAzure",
+    "specFolder": "migrate/resource-manager/Microsoft.OffAzure",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Quartz Governance Services (Power Platform)",
+    "armNamespace": "Microsoft.PowerPlatform",
+    "specFolder": "powerplatform",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Red Hat OpenShift",
+    "armNamespace": "Microsoft.RedHatOpenshift",
+    "specFolder": "redhatopenshift",
+    "sdkPackageName": "@azure/arm-redhatopenshift"
+  },
+  {
+    "service": "Azure Serial Console",
+    "armNamespace": "Microsoft.SerialConsole",
+    "specFolder": "serialconsole",
+    "sdkPackageName": "@azure/arm-serialconsole"
+  },
+  {
+    "service": "Managed Application",
+    "armNamespace": "Microsoft.Solutions",
+    "specFolder": "solutions",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Deployments",
+    "armNamespace": "Microsoft.Resources",
+    "specFolder": "resources/Microsoft.Resources/deployments",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Resource Manager - DataBoundaries",
+    "armNamespace": "Microsoft.Resources",
+    "specFolder": "resources/Microsoft.Resources/databoundaries",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Resource Manager - Subscriptions",
+    "armNamespace": "Microsoft.Resources",
+    "specFolder": "resources/Microsoft.Resources/subscriptions",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Resource Manager - Bicep",
+    "armNamespace": "Microsoft.Resources",
+    "specFolder": "resources/Microsoft.Resources/bicep",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Azure Resource Manager - DeploymentStacks",
+    "armNamespace": "Microsoft.Resources",
+    "specFolder": "resources/Microsoft.Resources/deploymentstakcs",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Group RP",
+    "armNamespace": "Microsoft.Management",
+    "specFolder": "management/Microsoft.Management/ServiceGroups",
+    "sdkPackageName": null
+  },
+  {
+    "service": "Custom Location",
+    "armNamespace": "Microsoft.ExtendedLocation",
+    "specFolder": "extendedlocation",
+    "sdkPackageName": "@azure/arm-extendedlocation"
+  },
+  {
+    "service": "Azure IoT Hub",
+    "armNamespace": "Microsoft.Devices",
+    "specFolder": "iothub",
+    "sdkPackageName": "@azure/arm-iothub"
+  }
+]

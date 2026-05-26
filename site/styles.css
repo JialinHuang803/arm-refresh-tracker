@@ -1,0 +1,125 @@
+:root {
+  --bg: #f7f8fa;
+  --fg: #1f2328;
+  --muted: #6e7681;
+  --border: #d0d7de;
+  --accent: #0969da;
+  --status-released-bg: #dafbe1;
+  --status-released-fg: #1a7f37;
+  --status-in-progress-bg: #fff8c5;
+  --status-in-progress-fg: #7a5b00;
+  --status-to-release-bg: #ddf4ff;
+  --status-to-release-fg: #0969da;
+  --status-not-started-bg: #ffebe9;
+  --status-not-started-fg: #cf222e;
+  --by-refresh-bg: #fdebff;
+  --by-refresh-fg: #8250df;
+  --by-self-serve-bg: #ddf4ff;
+  --by-self-serve-fg: #0969da;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+header {
+  padding: 18px 24px 12px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+header .sub {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+header .meta {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+header code {
+  background: #eaeef2;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.filters label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.filters select {
+  font-size: 13px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: white;
+}
+
+main {
+  padding: 16px 24px 32px;
+}
+
+table.dataTable {
+  background: white;
+  border: 1px solid var(--border);
+  border-collapse: collapse;
+}
+
+table.dataTable thead th {
+  background: #f6f8fa;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+table.dataTable td {
+  vertical-align: top;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-Released { background: var(--status-released-bg); color: var(--status-released-fg); }
+.badge-In-Progress { background: var(--status-in-progress-bg); color: var(--status-in-progress-fg); }
+.badge-To-Release { background: var(--status-to-release-bg); color: var(--status-to-release-fg); }
+.badge-Not-Started { background: var(--status-not-started-bg); color: var(--status-not-started-fg); }
+
+.tag-refresh { background: var(--by-refresh-bg); color: var(--by-refresh-fg); }
+.tag-self-serve { background: var(--by-self-serve-bg); color: var(--by-self-serve-fg); }

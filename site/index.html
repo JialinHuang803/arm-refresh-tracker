@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ARM SDK Refresh Tracker</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>ARM SDK Refresh Tracker</h1>
+      <p class="sub">Status of Swagger → TypeSpec refresh for tracked <code>@azure/arm-*</code> packages.</p>
+      <p class="meta">
+        <span id="lastUpdated">Loading…</span>
+        ·
+        <span id="rowCount"></span>
+        ·
+        <a href="https://github.com/JialinHuang803/arm-refresh-tracker">source</a>
+      </p>
+      <div class="filters">
+        <label>Release Status:
+          <select id="filter-status">
+            <option value="">all</option>
+          </select>
+        </label>
+        <label>Release By:
+          <select id="filter-by">
+            <option value="">all</option>
+          </select>
+        </label>
+      </div>
+    </header>
+    <main>
+      <table id="grid" class="display compact" style="width:100%">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>ARM Namespace</th>
+            <th>Spec Folder</th>
+            <th>SDK Package Name</th>
+            <th>Specs API Version</th>
+            <th>SDK PR</th>
+            <th>Release Status</th>
+            <th>Release By</th>
+          </tr>
+        </thead>
+      </table>
+    </main>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+name: Refresh ARM SDK Tracker
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # daily at 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      rebuild_index:
+        description: "Force rebuild package-index.json (ignores cache)"
+        required: false
+        default: "false"
+
+# Pages requires these.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One run at a time; if a new run starts, cancel the previous one.
+concurrency:
+  group: refresh
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      # Cache the package index between runs; key includes the ISO week
+      # so it refreshes weekly automatically.
+      - name: Compute cache key
+        id: cachekey
+        run: echo "key=index-$(date -u +%G-w%V)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore package-index cache
+        id: cache-index
+        if: ${{ github.event.inputs.rebuild_index != 'true' }}
+        uses: actions/cache@v4
+        with:
+          path: scripts/lib/package-index.json
+          key: ${{ steps.cachekey.outputs.key }}
+
+      - name: Build package index
+        if: ${{ steps.cache-index.outputs.cache-hit != 'true' || github.event.inputs.rebuild_index == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/build_index.py
+
+      - name: Refresh dashboard data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/refresh.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: refresh
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
