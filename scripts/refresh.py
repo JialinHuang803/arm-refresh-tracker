@@ -55,7 +55,12 @@ def _latest_version_from_tsp(text: str) -> str:
 
 
 def fetch_refresh_prs(session) -> dict[str, dict]:
-    """Search all refresh-labeled PRs and map packageName -> PR object."""
+    """Search refresh-labeled PRs and map packageName -> PR object.
+
+    Only merged or still-open PRs are kept: closed-unmerged PRs were
+    abandoned/superseded and would just clutter the dashboard with broken
+    links, so we treat them the same as 'no refresh PR'.
+    """
     print("[prs] searching refresh-labeled PRs…")
     items = search_issues(
         session,
@@ -63,18 +68,24 @@ def fetch_refresh_prs(session) -> dict[str, dict]:
     )
     print(f"[prs]   {len(items)} PR(s) found.")
     out: dict[str, dict] = {}
+    skipped_closed_unmerged = 0
     for it in items:
         title = it.get("title", "")
         m = TITLE_PKG_RE.search(title)
         if not m:
+            continue
+        state = it.get("state", "")
+        merged = bool(it.get("pull_request", {}).get("merged_at"))
+        if state == "closed" and not merged:
+            skipped_closed_unmerged += 1
             continue
         pkg_name = f"@azure/arm-{m.group(1)}"
         pr_obj = {
             "number": it["number"],
             "url": it["html_url"],
             "title": title,
-            "state": it.get("state", ""),
-            "merged": bool(it.get("pull_request", {}).get("merged_at")),
+            "state": state,
+            "merged": merged,
             "mergedAt": it.get("pull_request", {}).get("merged_at"),
             "updatedAt": it.get("updated_at"),
             "labels": [lbl.get("name", "") for lbl in it.get("labels", [])],
@@ -83,7 +94,7 @@ def fetch_refresh_prs(session) -> dict[str, dict]:
         prev = out.get(pkg_name)
         if prev is None or (pr_obj["updatedAt"] or "") > (prev["updatedAt"] or ""):
             out[pkg_name] = pr_obj
-    print(f"[prs]   mapped to {len(out)} package(s).")
+    print(f"[prs]   mapped to {len(out)} package(s) (skipped {skipped_closed_unmerged} closed-unmerged).")
     return out
 
 
@@ -136,19 +147,18 @@ def derive_release_status(
     package_name: str,
     sdk_path: str | None,
 ) -> str:
-    # If there is a refresh PR, its state drives the status.
+    # Refresh PR state drives the status (closed-unmerged PRs are filtered
+    # out upstream in fetch_refresh_prs, so `pr` is always None / open / merged).
     if pr is not None:
-        state = pr.get("state", "")
-        if state == "open":
+        if pr.get("state") == "open":
             return "In Progress"
         if pr.get("merged"):
             version = sdk_main_version(session, sdk_path)
             if version and is_published_on_npm(session, package_name, version):
                 return "Released"
             return "To Release"
-        # closed-unmerged falls through to the "no PR" rules
-    # No active refresh PR (or closed-unmerged):
-    # already TypeSpec on main -> Released (self-served); else Not Started.
+    # No refresh PR (or closed-unmerged): already TypeSpec on main -> Released
+    # (self-served); otherwise Not Started.
     return "Released" if sdk_is_ts else "Not Started"
 
 

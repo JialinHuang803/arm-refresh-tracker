@@ -12,21 +12,21 @@ The dashboard publishes one row per tracked SDK package. Source data:
 | 3 | **Spec Folder** | `brownfield.json` | Top-level subfolder under `specification/` in azure-rest-api-specs. |
 | 4 | **SDK Package Name** | `brownfield.json` | One row per package; multi-package services are pre-expanded. |
 | 5 | **Specs API Version** | Raw fetch of `{specPath}/main.tsp` on `azure-rest-api-specs@main`. Reads the last value of `enum Versions {…}`. | Blank if no TypeSpec spec is authored. |
-| 6 | **SDK PR** | One GitHub search per run: `repo:Azure/azure-sdk-for-js is:pr label:refresh`. PR titles match the pattern `[AutoPR @azure-arm-<name>]…`, which is parsed back to `@azure/arm-<name>`. | If multiple PRs share a package, the most recently updated one wins. |
+| 6 | **SDK PR** | One GitHub search per run: `repo:Azure/azure-sdk-for-js is:pr label:refresh`. PR titles match the pattern `[AutoPR @azure-arm-<name>]…`, which is parsed back to `@azure/arm-<name>`. **Closed-but-not-merged PRs are dropped** — only still-open or successfully-merged refresh PRs are linked. | If multiple eligible PRs share a package, the most recently updated one wins. |
 | 7 | **Release Status** | Derived (see below). | Color-coded badge. |
 | 8 | **Release By** | Derived (see below). | |
 
 ## Release Status (column 7)
 
-`sdkIsTypeSpec` is determined by checking whether `{sdkPath}/tsp-location.yaml` exists on `azure-sdk-for-js@main`. `pr` is the refresh PR object for this package (or `null`).
+`sdkIsTypeSpec` is determined by checking whether `{sdkPath}/tsp-location.yaml` exists on `azure-sdk-for-js@main`. `pr` is the refresh PR object for this package (or `null`). Closed-unmerged refresh PRs are filtered out upstream, so the table below assumes `pr` is `null` / open / merged.
 
 | Condition | Release Status |
 |---|---|
 | `pr.state == "open"` | **In Progress** |
-| `pr.state == "closed"` && `merged == true` && exact `package.json` version is published on npm | **Released** |
-| `pr.state == "closed"` && `merged == true` && version is **not** on npm yet | **To Release** |
-| no `pr` (or closed-unmerged) && `sdkIsTypeSpec == true` | **Released** (self-served) |
-| no `pr` (or closed-unmerged) && `sdkIsTypeSpec == false` | **Not Started** |
+| `pr.merged == true` && exact `package.json` version is published on npm | **Released** |
+| `pr.merged == true` && version is **not** on npm yet | **To Release** |
+| `pr == null` && `sdkIsTypeSpec == true` | **Released** (self-served) |
+| `pr == null` && `sdkIsTypeSpec == false` | **Not Started** |
 
 ## Release By (column 8)
 
