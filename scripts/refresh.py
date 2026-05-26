@@ -89,12 +89,54 @@ def fetch_refresh_prs(session) -> dict[str, dict]:
             "mergedAt": it.get("pull_request", {}).get("merged_at"),
             "updatedAt": it.get("updated_at"),
             "labels": [lbl.get("name", "") for lbl in it.get("labels", [])],
+            "kind": "refresh",
         }
         # Keep most recently updated if duplicate
         prev = out.get(pkg_name)
         if prev is None or (pr_obj["updatedAt"] or "") > (prev["updatedAt"] or ""):
             out[pkg_name] = pr_obj
     print(f"[prs]   mapped to {len(out)} package(s) (skipped {skipped_closed_unmerged} closed-unmerged).")
+    return out
+
+
+def fetch_self_service_prs(session) -> dict[str, dict]:
+    """Search OPEN 'Self-Service Release'-labeled PRs and map packageName -> PR.
+
+    Self-service release PRs are also created by the AutoPR bot with the same
+    title pattern as refresh PRs, so the same regex back-maps to the package
+    name. We only look at open ones — merged self-service releases land on
+    main as TypeSpec code, which is already covered by the sdkIsTypeSpec
+    branch in derive_release_status. Closed-unmerged ones are abandoned and
+    not actionable.
+    """
+    print("[prs] searching open Self-Service Release PRs…")
+    items = search_issues(
+        session,
+        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:open label:"Self-Service Release"',
+    )
+    print(f"[prs]   {len(items)} PR(s) found.")
+    out: dict[str, dict] = {}
+    for it in items:
+        title = it.get("title", "")
+        m = TITLE_PKG_RE.search(title)
+        if not m:
+            continue
+        pkg_name = f"@azure/arm-{m.group(1)}"
+        pr_obj = {
+            "number": it["number"],
+            "url": it["html_url"],
+            "title": title,
+            "state": it.get("state", ""),
+            "merged": False,
+            "mergedAt": None,
+            "updatedAt": it.get("updated_at"),
+            "labels": [lbl.get("name", "") for lbl in it.get("labels", [])],
+            "kind": "self-service",
+        }
+        prev = out.get(pkg_name)
+        if prev is None or (pr_obj["updatedAt"] or "") > (prev["updatedAt"] or ""):
+            out[pkg_name] = pr_obj
+    print(f"[prs]   mapped to {len(out)} package(s).")
     return out
 
 
@@ -134,7 +176,7 @@ def is_published_on_npm(session, package_name: str, version: str) -> bool:
 
 def derive_release_by(pr: dict | None, sdk_is_ts: bool) -> str:
     if pr is not None:
-        return "refresh"
+        return "self-serve" if pr.get("kind") == "self-service" else "refresh"
     if sdk_is_ts:
         return "self-serve"
     return ""
@@ -168,6 +210,7 @@ def build_rows(session) -> list[dict]:
         raise SystemExit(f"missing {INDEX}; run scripts/build_index.py first.")
     index = json.loads(INDEX.read_text(encoding="utf-8"))
     refresh_prs = fetch_refresh_prs(session)
+    self_service_prs = fetch_self_service_prs(session)
 
     rows: list[dict] = []
     total = len(brownfield)
@@ -179,7 +222,12 @@ def build_rows(session) -> list[dict]:
 
         sdk_is_ts = sdk_is_typespec(session, sdk_path) if pkg else False
         specs_ver = fetch_specs_api_version(session, spec_path)
-        pr = refresh_prs.get(pkg) if pkg else None
+        # An open Self-Service Release PR takes precedence over the refresh PR
+        # for this row: it represents the active release attempt, so the row
+        # should be marked In Progress / self-serve and link the self-service PR.
+        pr = None
+        if pkg:
+            pr = self_service_prs.get(pkg) or refresh_prs.get(pkg)
         release_by = derive_release_by(pr, sdk_is_ts)
         release_status = derive_release_status(session, pr, sdk_is_ts, pkg or "", sdk_path)
 
