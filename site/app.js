@@ -25,7 +25,17 @@
     if (!iso) return "—";
     try {
       var d = new Date(iso);
-      return d.toUTCString().replace("GMT", "UTC");
+      var parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Asia/Singapore",
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(d);
+      return parts + " UTC+8";
     } catch (e) {
       return iso;
     }
