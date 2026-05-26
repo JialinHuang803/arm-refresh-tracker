@@ -47,7 +47,6 @@ jobs:
 
       - name: Restore package-index cache
         id: cache-index
-        if: ${{ github.event.inputs.rebuild_index != 'true' }}
         uses: actions/cache@v4
         with:
           path: scripts/lib/package-index.json

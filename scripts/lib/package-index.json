@@ -1,0 +1,1154 @@
+{
+  "@azure/arm-advisor": {
+    "specPath": "specification/advisor/resource-manager/Microsoft.Advisor/Advisor",
+    "sdkPath": "sdk/advisor/arm-advisor"
+  },
+  "@azure/arm-agricultureplatform": {
+    "specPath": "specification/agricultureplatform/AgriculturePlatform.Management",
+    "sdkPath": "sdk/agricultureplatform/arm-agricultureplatform"
+  },
+  "@azure/arm-agrifood": {
+    "sdkPath": "sdk/agrifood/arm-agrifood"
+  },
+  "@azure/arm-alertprocessingrules": {
+    "specPath": "specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertProcessingRules",
+    "sdkPath": "sdk/alertprocessingrules/arm-alertprocessingrules"
+  },
+  "@azure/arm-alertrulerecommendations": {
+    "specPath": "specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertRuleRecommendations",
+    "sdkPath": "sdk/alertrulerecommendations/arm-alertrulerecommendations"
+  },
+  "@azure/arm-alertsmanagement": {
+    "specPath": "specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/AlertsManagement",
+    "sdkPath": "sdk/alertsmanagement/arm-alertsmanagement"
+  },
+  "@azure/arm-analysisservices": {
+    "sdkPath": "sdk/analysisservices/arm-analysisservices"
+  },
+  "@azure/arm-apicenter": {
+    "specPath": "specification/apicenter/ApiCenter.Management",
+    "sdkPath": "sdk/apicenter/arm-apicenter"
+  },
+  "@azure/arm-apimanagement": {
+    "specPath": "specification/apimanagement/resource-manager/Microsoft.ApiManagement/ApiManagement",
+    "sdkPath": "sdk/apimanagement/arm-apimanagement"
+  },
+  "@azure/arm-appcomplianceautomation": {
+    "specPath": "specification/appcomplianceautomation/AppComplianceAutomation.Management",
+    "sdkPath": "sdk/appcomplianceautomation/arm-appcomplianceautomation"
+  },
+  "@azure/arm-appconfiguration": {
+    "specPath": "specification/appconfiguration/resource-manager/Microsoft.AppConfiguration/AppConfiguration",
+    "sdkPath": "sdk/appconfiguration/arm-appconfiguration"
+  },
+  "@azure/arm-appcontainers": {
+    "specPath": "specification/app/resource-manager/Microsoft.App/ContainerApps",
+    "sdkPath": "sdk/appcontainers/arm-appcontainers"
+  },
+  "@azure/arm-appinsights": {
+    "specPath": "specification/applicationinsights/resource-manager/Microsoft.Insights/ApplicationInsights",
+    "sdkPath": "sdk/applicationinsights/arm-appinsights"
+  },
+  "@azure/arm-appnetwork": {
+    "specPath": "specification/applink/AppLink.Management",
+    "sdkPath": "sdk/appnetwork/arm-appnetwork"
+  },
+  "@azure/arm-appservice": {
+    "specPath": "specification/web/resource-manager/Microsoft.Web/AppService",
+    "sdkPath": "sdk/appservice/arm-appservice"
+  },
+  "@azure/arm-appservice-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/appservice/arm-appservice-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-arizeaiobservabilityeval": {
+    "specPath": "specification/liftrarize/ArizeAi.ObservabilityEval.Management",
+    "sdkPath": "sdk/liftrarize/arm-arizeaiobservabilityeval"
+  },
+  "@azure/arm-artifactsigning": {
+    "specPath": "specification/codesigning/CodeSigning.Management",
+    "sdkPath": "sdk/artifactsigning/arm-artifactsigning"
+  },
+  "@azure/arm-astro": {
+    "specPath": "specification/liftrastronomer/Astronomer.Astro.Management",
+    "sdkPath": "sdk/astro/arm-astro"
+  },
+  "@azure/arm-attestation": {
+    "specPath": "specification/attestation/resource-manager/Microsoft.Attestation/Attestation",
+    "sdkPath": "sdk/attestation/arm-attestation"
+  },
+  "@azure/arm-authorization": {
+    "specPath": "specification/authorization/resource-manager/Microsoft.Authorization/Authorization",
+    "sdkPath": "sdk/authorization/arm-authorization"
+  },
+  "@azure/arm-authorization-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/authorization/arm-authorization-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-automanage": {
+    "sdkPath": "sdk/automanage/arm-automanage"
+  },
+  "@azure/arm-automation": {
+    "specPath": "specification/automation/Automation.Management",
+    "sdkPath": "sdk/automation/arm-automation"
+  },
+  "@azure/arm-avs": {
+    "specPath": "specification/vmware/resource-manager/Microsoft.AVS/AVS",
+    "sdkPath": "sdk/avs/arm-avs"
+  },
+  "@azure/arm-azureadexternalidentities": {
+    "sdkPath": "sdk/azureadexternalidentities/arm-azureadexternalidentities"
+  },
+  "@azure/arm-azurestack": {
+    "sdkPath": "sdk/azurestack/arm-azurestack"
+  },
+  "@azure/arm-azurestackhci": {
+    "specPath": "specification/azurestackhci/resource-manager/Microsoft.AzureStackHCI/StackHCI",
+    "sdkPath": "sdk/azurestackhci/arm-azurestackhci"
+  },
+  "@azure/arm-azurestackhcivm": {
+    "specPath": "specification/azurestackhci/resource-manager/Microsoft.AzureStackHCI/StackHCIVM",
+    "sdkPath": "sdk/azurestackhcivm/arm-azurestackhcivm"
+  },
+  "@azure/arm-baremetalinfrastructure": {
+    "sdkPath": "sdk/baremetalinfrastructure/arm-baremetalinfrastructure"
+  },
+  "@azure/arm-batch": {
+    "specPath": "specification/batch/resource-manager/Microsoft.Batch/Batch",
+    "sdkPath": "sdk/batch/arm-batch"
+  },
+  "@azure/arm-billing": {
+    "specPath": "specification/billing/resource-manager/Microsoft.Billing/Billing",
+    "sdkPath": "sdk/billing/arm-billing"
+  },
+  "@azure/arm-billingbenefits": {
+    "specPath": "specification/billingbenefits/BillingBenefits.Management",
+    "sdkPath": "sdk/billingbenefits/arm-billingbenefits"
+  },
+  "@azure/arm-botservice": {
+    "specPath": "specification/botservice/resource-manager/Microsoft.BotService/BotService",
+    "sdkPath": "sdk/botservice/arm-botservice"
+  },
+  "@azure/arm-carbonoptimization": {
+    "specPath": "specification/carbon/Carbon.Management",
+    "sdkPath": "sdk/carbonoptimization/arm-carbonoptimization"
+  },
+  "@azure/arm-cdn": {
+    "specPath": "specification/cdn/resource-manager/Microsoft.Cdn/Cdn",
+    "sdkPath": "sdk/cdn/arm-cdn"
+  },
+  "@azure/arm-certificateregistration": {
+    "specPath": "specification/certificateregistration/resource-manager/Microsoft.CertificateRegistration/CertificateRegistration",
+    "sdkPath": "sdk/certificateregistration/arm-certificateregistration"
+  },
+  "@azure/arm-changeanalysis": {
+    "sdkPath": "sdk/changeanalysis/arm-changeanalysis"
+  },
+  "@azure/arm-changes": {
+    "sdkPath": "sdk/changes/arm-changes"
+  },
+  "@azure/arm-chaos": {
+    "specPath": "specification/chaos/resource-manager/Microsoft.Chaos/Chaos",
+    "sdkPath": "sdk/chaos/arm-chaos"
+  },
+  "@azure/arm-cloudhealth": {
+    "specPath": "specification/cloudhealth/CloudHealth.Management",
+    "sdkPath": "sdk/cloudhealth/arm-cloudhealth"
+  },
+  "@azure/arm-cognitiveservices": {
+    "specPath": "specification/cognitiveservices/CognitiveServices.Management",
+    "sdkPath": "sdk/cognitiveservices/arm-cognitiveservices"
+  },
+  "@azure/arm-commerce": {
+    "specPath": "specification/commerce/resource-manager/Microsoft.Commerce/Commerce",
+    "sdkPath": "sdk/commerce/arm-commerce"
+  },
+  "@azure/arm-commerce-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/commerce/arm-commerce-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-commitmentplans": {
+    "sdkPath": "sdk/machinelearning/arm-commitmentplans"
+  },
+  "@azure/arm-commonedgesitemanageroperations": {
+    "specPath": "specification/edge/Microsoft.Edge.Management"
+  },
+  "@azure/arm-communication": {
+    "specPath": "specification/communication/Communication.Management",
+    "sdkPath": "sdk/communication/arm-communication"
+  },
+  "@azure/arm-compute": {
+    "specPath": "specification/compute/resource-manager/Microsoft.Compute/Compute",
+    "sdkPath": "sdk/compute/arm-compute"
+  },
+  "@azure/arm-compute-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/compute/arm-compute-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-computebulkactions": {
+    "specPath": "specification/compute/resource-manager/Microsoft.Compute/Bulkactions",
+    "sdkPath": "sdk/computebulkactions/arm-computebulkactions"
+  },
+  "@azure/arm-computefleet": {
+    "specPath": "specification/azurefleet/resource-manager/Microsoft.AzureFleet/AzureFleet",
+    "sdkPath": "sdk/computefleet/arm-computefleet"
+  },
+  "@azure/arm-computelimit": {
+    "specPath": "specification/computelimit/resource-manager/Microsoft.ComputeLimit/ComputeLimit"
+  },
+  "@azure/arm-computerecommender": {
+    "specPath": "specification/compute/resource-manager/Microsoft.Compute/Recommender",
+    "sdkPath": "sdk/compute/arm-computerecommender"
+  },
+  "@azure/arm-computeschedule": {
+    "specPath": "specification/computeschedule/ComputeSchedule.Management",
+    "sdkPath": "sdk/computeschedule/arm-computeschedule"
+  },
+  "@azure/arm-confidentialledger": {
+    "specPath": "specification/confidentialledger/resource-manager/Microsoft.ConfidentialLedger/ConfidentialLedger",
+    "sdkPath": "sdk/confidentialledger/arm-confidentialledger"
+  },
+  "@azure/arm-confluent": {
+    "specPath": "specification/confluent/Confluent.Management",
+    "sdkPath": "sdk/confluent/arm-confluent"
+  },
+  "@azure/arm-connectedcache": {
+    "specPath": "specification/connectedcache/ConnectedCache.Management",
+    "sdkPath": "sdk/connectedcache/arm-connectedcache"
+  },
+  "@azure/arm-connectedvmware": {
+    "sdkPath": "sdk/connectedvmware/arm-connectedvmware"
+  },
+  "@azure/arm-consumption": {
+    "specPath": "specification/consumption/resource-manager/Microsoft.Consumption/Consumption",
+    "sdkPath": "sdk/consumption/arm-consumption"
+  },
+  "@azure/arm-containerinstance": {
+    "specPath": "specification/containerinstance/resource-manager/Microsoft.ContainerInstance/ContainerInstance",
+    "sdkPath": "sdk/containerinstance/arm-containerinstance"
+  },
+  "@azure/arm-containerorchestratorruntime": {
+    "specPath": "specification/kubernetesruntime/KubernetesRuntime.Management",
+    "sdkPath": "sdk/kubernetesruntime/arm-containerorchestratorruntime"
+  },
+  "@azure/arm-containerregistry": {
+    "specPath": "specification/containerregistry/resource-manager/Microsoft.ContainerRegistry/Registry",
+    "sdkPath": "sdk/containerregistry/arm-containerregistry"
+  },
+  "@azure/arm-containerregistrytasks": {
+    "specPath": "specification/containerregistry/resource-manager/Microsoft.ContainerRegistry/RegistryTasks",
+    "sdkPath": "sdk/containerregistry/arm-containerregistrytasks"
+  },
+  "@azure/arm-containerservice": {
+    "specPath": "specification/containerservice/resource-manager/Microsoft.ContainerService/aks",
+    "sdkPath": "sdk/containerservice/arm-containerservice"
+  },
+  "@azure/arm-containerserviceaimanager": {
+    "specPath": "specification/containerservice/resource-manager/Microsoft.ContainerService/aimanager"
+  },
+  "@azure/arm-containerservicefleet": {
+    "specPath": "specification/containerservice/resource-manager/Microsoft.ContainerService/fleet",
+    "sdkPath": "sdk/containerservice/arm-containerservicefleet"
+  },
+  "@azure/arm-containerservicenodecustomization": {
+    "specPath": "specification/containerservice/resource-manager/Microsoft.ContainerService/nodecustomization"
+  },
+  "@azure/arm-containerservicepreparedimagespecification": {
+    "specPath": "specification/containerservice/resource-manager/Microsoft.ContainerService/preparedimagespecification"
+  },
+  "@azure/arm-containerservicesafeguards": {
+    "specPath": "specification/containerservice/resource-manager/Microsoft.ContainerService/deploymentsafeguards",
+    "sdkPath": "sdk/containerservice/arm-containerservicesafeguards"
+  },
+  "@azure/arm-contoso": {
+    "specPath": "specification/contosowidgetmanager/Contoso.Management"
+  },
+  "@azure/arm-cosmosdb": {
+    "specPath": "specification/cosmos-db/resource-manager/Microsoft.DocumentDB/DocumentDB",
+    "sdkPath": "sdk/cosmosdb/arm-cosmosdb"
+  },
+  "@azure/arm-cosmosdbforpostgresql": {
+    "sdkPath": "sdk/cosmosforpostgresql/arm-cosmosdbforpostgresql"
+  },
+  "@azure/arm-costmanagement": {
+    "specPath": "specification/cost-management/resource-manager/Microsoft.CostManagement/CostManagement",
+    "sdkPath": "sdk/cost-management/arm-costmanagement"
+  },
+  "@azure/arm-customerinsights": {
+    "sdkPath": "sdk/customer-insights/arm-customerinsights"
+  },
+  "@azure/arm-dashboard": {
+    "specPath": "specification/dashboard/Dashboard.Management",
+    "sdkPath": "sdk/dashboard/arm-dashboard"
+  },
+  "@azure/arm-databasefleetmanager": {
+    "specPath": "specification/databasefleetmanager/DatabaseFleetManager.Management"
+  },
+  "@azure/arm-databasewatcher": {
+    "specPath": "specification/databasewatcher/DatabaseWatcher.Management",
+    "sdkPath": "sdk/databasewatcher/arm-databasewatcher"
+  },
+  "@azure/arm-databoundaries": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/databoundaries",
+    "sdkPath": "sdk/databoundaries/arm-databoundaries"
+  },
+  "@azure/arm-databox": {
+    "specPath": "specification/databox/resource-manager/Microsoft.DataBox/DataBox",
+    "sdkPath": "sdk/databox/arm-databox"
+  },
+  "@azure/arm-databoxedge": {
+    "specPath": "specification/databoxedge/resource-manager/Microsoft.DataBoxEdge/DataBoxEdge",
+    "sdkPath": "sdk/databoxedge/arm-databoxedge"
+  },
+  "@azure/arm-databoxedge-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/databoxedge/arm-databoxedge-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-databricks": {
+    "specPath": "specification/databricks/resource-manager/Microsoft.Databricks/Databricks",
+    "sdkPath": "sdk/databricks/arm-databricks"
+  },
+  "@azure/arm-datacatalog": {
+    "sdkPath": "sdk/datacatalog/arm-datacatalog"
+  },
+  "@azure/arm-datacollectionruleconfigurationmetadata": {
+    "specPath": "specification/monitor/resource-manager/Microsoft.Insights/DataCollectionRuleConfigurationMetadata"
+  },
+  "@azure/arm-datadog": {
+    "specPath": "specification/datadog/Datadog.Management",
+    "sdkPath": "sdk/datadog/arm-datadog"
+  },
+  "@azure/arm-datafactory": {
+    "specPath": "specification/datafactory/resource-manager/Microsoft.DataFactory/DataFactory",
+    "sdkPath": "sdk/datafactory/arm-datafactory"
+  },
+  "@azure/arm-datalake-analytics": {
+    "sdkPath": "sdk/datalake-analytics/arm-datalake-analytics"
+  },
+  "@azure/arm-datamigration": {
+    "specPath": "specification/datamigration/resource-manager/Microsoft.DataMigration/DataMigration",
+    "sdkPath": "sdk/datamigration/arm-datamigration"
+  },
+  "@azure/arm-dataprotection": {
+    "specPath": "specification/dataprotection/resource-manager/Microsoft.DataProtection/DataProtection",
+    "sdkPath": "sdk/dataprotection/arm-dataprotection"
+  },
+  "@azure/arm-defendereasm": {
+    "sdkPath": "sdk/defendereasm/arm-defendereasm"
+  },
+  "@azure/arm-dell-storage": {
+    "specPath": "specification/dell/Dell.Storage.Management",
+    "sdkPath": "sdk/dell/arm-dell-storage"
+  },
+  "@azure/arm-dependencymap": {
+    "specPath": "specification/azuredependencymap/DependencyMap.Management",
+    "sdkPath": "sdk/dependencymap/arm-dependencymap"
+  },
+  "@azure/arm-deploymentmanager": {
+    "sdkPath": "sdk/deploymentmanager/arm-deploymentmanager"
+  },
+  "@azure/arm-desktopvirtualization": {
+    "sdkPath": "sdk/desktopvirtualization/arm-desktopvirtualization"
+  },
+  "@azure/arm-devcenter": {
+    "specPath": "specification/devcenter/DevCenter.Management",
+    "sdkPath": "sdk/devcenter/arm-devcenter"
+  },
+  "@azure/arm-devhub": {
+    "specPath": "specification/developerhub/resource-manager/Microsoft.DevHub/DeveloperHub",
+    "sdkPath": "sdk/devhub/arm-devhub"
+  },
+  "@azure/arm-deviceprovisioningservices": {
+    "specPath": "specification/deviceprovisioningservices/resource-manager/Microsoft.Devices/DeviceProvisioningServices",
+    "sdkPath": "sdk/deviceprovisioningservices/arm-deviceprovisioningservices"
+  },
+  "@azure/arm-deviceregistry": {
+    "specPath": "specification/deviceregistry/DeviceRegistry.Management",
+    "sdkPath": "sdk/deviceregistry/arm-deviceregistry"
+  },
+  "@azure/arm-deviceupdate": {
+    "sdkPath": "sdk/deviceupdate/arm-deviceupdate"
+  },
+  "@azure/arm-devopsinfrastructure": {
+    "specPath": "specification/devopsinfrastructure/Microsoft.DevOpsInfrastructure.Management",
+    "sdkPath": "sdk/devopsinfrastructure/arm-devopsinfrastructure"
+  },
+  "@azure/arm-devspaces": {
+    "sdkPath": "sdk/devspaces/arm-devspaces"
+  },
+  "@azure/arm-devtestlabs": {
+    "specPath": "specification/devtestlabs/resource-manager/Microsoft.DevTestLab/DevTestLabs",
+    "sdkPath": "sdk/devtestlabs/arm-devtestlabs"
+  },
+  "@azure/arm-digitaltwins": {
+    "sdkPath": "sdk/digitaltwins/arm-digitaltwins"
+  },
+  "@azure/arm-disconnectedoperations": {
+    "specPath": "specification/edge/Microsoft.Edge.DisconnectedOperations.Management",
+    "sdkPath": "sdk/disconnectedoperations/arm-disconnectedoperations"
+  },
+  "@azure/arm-discovery": {
+    "specPath": "specification/discovery/Discovery.Management",
+    "sdkPath": "sdk/discovery/arm-discovery"
+  },
+  "@azure/arm-dns": {
+    "specPath": "specification/dns/resource-manager/Microsoft.Network/Dns",
+    "sdkPath": "sdk/dns/arm-dns"
+  },
+  "@azure/arm-dns-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/dns/arm-dns-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-dnsresolver": {
+    "specPath": "specification/dnsresolver/resource-manager/Microsoft.Network/DnsResolver",
+    "sdkPath": "sdk/dnsresolver/arm-dnsresolver"
+  },
+  "@azure/arm-domainregistration": {
+    "specPath": "specification/domainregistration/resource-manager/Microsoft.DomainRegistration/DomainRegistration",
+    "sdkPath": "sdk/domainregistration/arm-domainregistration"
+  },
+  "@azure/arm-domainservices": {
+    "specPath": "specification/domainservices/resource-manager/Microsoft.AAD/DomainServices",
+    "sdkPath": "sdk/domainservices/arm-domainservices"
+  },
+  "@azure/arm-durabletask": {
+    "specPath": "specification/durabletask/DurableTask.Management",
+    "sdkPath": "sdk/durabletask/arm-durabletask"
+  },
+  "@azure/arm-dynatrace": {
+    "specPath": "specification/dynatrace/Dynatrace.Management",
+    "sdkPath": "sdk/dynatrace/arm-dynatrace"
+  },
+  "@azure/arm-edgeactions": {
+    "specPath": "specification/cdn/resource-manager/Microsoft.Cdn/EdgeActions",
+    "sdkPath": "sdk/edgeactions/arm-edgeactions"
+  },
+  "@azure/arm-edgemarketplace": {
+    "specPath": "specification/edgemarketplace/Microsoft.EdgeMarketPlace.Management"
+  },
+  "@azure/arm-edgeorder": {
+    "specPath": "specification/edgeorder/resource-manager/Microsoft.EdgeOrder/EdgeOrder"
+  },
+  "@azure/arm-edgezones": {
+    "specPath": "specification/edgezones/EdgeZones.Management",
+    "sdkPath": "sdk/edgezones/arm-edgezones"
+  },
+  "@azure/arm-education": {
+    "specPath": "specification/education/resource-manager/Microsoft.Education/Education",
+    "sdkPath": "sdk/education/arm-education"
+  },
+  "@azure/arm-elastic": {
+    "specPath": "specification/elastic/Elastic.Management",
+    "sdkPath": "sdk/elastic/arm-elastic"
+  },
+  "@azure/arm-elasticsan": {
+    "specPath": "specification/elasticsan/resource-manager/Microsoft.ElasticSan/ElasticSan",
+    "sdkPath": "sdk/elasticsans/arm-elasticsan"
+  },
+  "@azure/arm-eventgrid": {
+    "specPath": "specification/eventgrid/resource-manager/Microsoft.EventGrid/EventGrid",
+    "sdkPath": "sdk/eventgrid/arm-eventgrid"
+  },
+  "@azure/arm-eventhub": {
+    "specPath": "specification/eventhub/resource-manager/Microsoft.EventHub/Eventhub",
+    "sdkPath": "sdk/eventhub/arm-eventhub"
+  },
+  "@azure/arm-eventhub-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/eventhub/arm-eventhub-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-extendedlocation": {
+    "specPath": "specification/extendedlocation/resource-manager/Microsoft.ExtendedLocation/CustomLocations",
+    "sdkPath": "sdk/extendedlocation/arm-extendedlocation"
+  },
+  "@azure/arm-fabric": {
+    "specPath": "specification/fabric/resource-manager/Microsoft.Fabric/Fabric",
+    "sdkPath": "sdk/fabric/arm-fabric"
+  },
+  "@azure/arm-features": {
+    "sdkPath": "sdk/features/arm-features"
+  },
+  "@azure/arm-fileshares": {
+    "specPath": "specification/fileshares/resource-manager/Microsoft.FileShares/FileShares",
+    "sdkPath": "sdk/fileshares/arm-fileshares"
+  },
+  "@azure/arm-fluidrelay": {
+    "sdkPath": "sdk/fluidrelay/arm-fluidrelay"
+  },
+  "@azure/arm-frontdoor": {
+    "specPath": "specification/frontdoor/resource-manager/Microsoft.Network/FrontDoor",
+    "sdkPath": "sdk/frontdoor/arm-frontdoor"
+  },
+  "@azure/arm-graphservices": {
+    "sdkPath": "sdk/graphservices/arm-graphservices"
+  },
+  "@azure/arm-guestconfiguration": {
+    "specPath": "specification/guestconfiguration/resource-manager/Microsoft.GuestConfiguration/Assignments",
+    "sdkPath": "sdk/guestconfiguration/arm-guestconfiguration"
+  },
+  "@azure/arm-hanaonazure": {
+    "specPath": "specification/hanaonazure/resource-manager/Microsoft.HanaOnAzure/HanaOnAzure",
+    "sdkPath": "sdk/hanaonazure/arm-hanaonazure"
+  },
+  "@azure/arm-hardwaresecuritymodules": {
+    "specPath": "specification/hardwaresecuritymodules/resource-manager/Microsoft.HardwareSecurityModules/HardwareSecurityModules",
+    "sdkPath": "sdk/hardwaresecuritymodules/arm-hardwaresecuritymodules"
+  },
+  "@azure/arm-hdinsight": {
+    "specPath": "specification/hdinsight/resource-manager/Microsoft.HDInsight/HDInsight",
+    "sdkPath": "sdk/hdinsight/arm-hdinsight"
+  },
+  "@azure/arm-healthbot": {
+    "specPath": "specification/healthbot/HealthBot.Management",
+    "sdkPath": "sdk/healthbot/arm-healthbot"
+  },
+  "@azure/arm-healthcareapis": {
+    "specPath": "specification/healthcareapis/resource-manager/Microsoft.HealthcareApis/HealthcareApis",
+    "sdkPath": "sdk/healthcareapis/arm-healthcareapis"
+  },
+  "@azure/arm-healthdataaiservices": {
+    "specPath": "specification/healthdataaiservices/HealthDataAIServices.Management",
+    "sdkPath": "sdk/healthdataaiservices/arm-healthdataaiservices"
+  },
+  "@azure/arm-horizondb": {
+    "specPath": "specification/horizondb/resource-manager/Microsoft.HorizonDb/HorizonDb",
+    "sdkPath": "sdk/horizondb/arm-horizondb"
+  },
+  "@azure/arm-hybridcompute": {
+    "specPath": "specification/hybridcompute/resource-manager/Microsoft.HybridCompute/HybridCompute",
+    "sdkPath": "sdk/hybridcompute/arm-hybridcompute"
+  },
+  "@azure/arm-hybridconnectivity": {
+    "specPath": "specification/hybridconnectivity/HybridConnectivity.Management",
+    "sdkPath": "sdk/hybridconnectivity/arm-hybridconnectivity"
+  },
+  "@azure/arm-hybridcontainerservice": {
+    "sdkPath": "sdk/hybridcontainerservice/arm-hybridcontainerservice"
+  },
+  "@azure/arm-hybridkubernetes": {
+    "specPath": "specification/hybridkubernetes/HybridKubernetes.Management",
+    "sdkPath": "sdk/hybridkubernetes/arm-hybridkubernetes"
+  },
+  "@azure/arm-hybridnetwork": {
+    "sdkPath": "sdk/hybridnetwork/arm-hybridnetwork"
+  },
+  "@azure/arm-imagebuilder": {
+    "specPath": "specification/imagebuilder/resource-manager/Microsoft.VirtualMachineImages/ImageBuilder",
+    "sdkPath": "sdk/imagebuilder/arm-imagebuilder"
+  },
+  "@azure/arm-impactreporting": {
+    "specPath": "specification/impact/Impact.Management",
+    "sdkPath": "sdk/impactreporting/arm-impactreporting"
+  },
+  "@azure/arm-informaticadatamanagement": {
+    "specPath": "specification/informatica/Informatica.DataManagement.Management",
+    "sdkPath": "sdk/informatica/arm-informaticadatamanagement"
+  },
+  "@azure/arm-iotcentral": {
+    "sdkPath": "sdk/iotcentral/arm-iotcentral"
+  },
+  "@azure/arm-iotfirmwaredefense": {
+    "specPath": "specification/fist/IotFirmwareDefense.Management",
+    "sdkPath": "sdk/iotfirmwaredefense/arm-iotfirmwaredefense"
+  },
+  "@azure/arm-iothub": {
+    "specPath": "specification/iothub/resource-manager/Microsoft.Devices/IoTHub",
+    "sdkPath": "sdk/iothub/arm-iothub"
+  },
+  "@azure/arm-iothub-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/iothub/arm-iothub-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-iotoperations": {
+    "specPath": "specification/iotoperations/IoTOperations.Management",
+    "sdkPath": "sdk/iotoperations/arm-iotoperations"
+  },
+  "@azure/arm-keyvault": {
+    "specPath": "specification/keyvault/resource-manager/Microsoft.KeyVault/KeyVault",
+    "sdkPath": "sdk/keyvault/arm-keyvault"
+  },
+  "@azure/arm-keyvault-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/keyvault/arm-keyvault-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-kubernetesconfiguration": {
+    "sdkPath": "sdk/kubernetesconfiguration/arm-kubernetesconfiguration"
+  },
+  "@azure/arm-kubernetesconfiguration-extensions": {
+    "specPath": "specification/kubernetesconfiguration/resource-manager/Microsoft.KubernetesConfiguration/extensions",
+    "sdkPath": "sdk/kubernetesconfiguration/arm-kubernetesconfiguration-extensions"
+  },
+  "@azure/arm-kubernetesconfiguration-extensiontypes": {
+    "specPath": "specification/kubernetesconfiguration/resource-manager/Microsoft.KubernetesConfiguration/extensionTypes",
+    "sdkPath": "sdk/kubernetesconfiguration/arm-kubernetesconfiguration-extensiontypes"
+  },
+  "@azure/arm-kubernetesconfiguration-fluxconfigurations": {
+    "specPath": "specification/kubernetesconfiguration/resource-manager/Microsoft.KubernetesConfiguration/fluxConfigurations",
+    "sdkPath": "sdk/kubernetesconfiguration/arm-kubernetesconfiguration-fluxconfigurations"
+  },
+  "@azure/arm-kubernetesconfiguration-privatelinkscopes": {
+    "specPath": "specification/kubernetesconfiguration/resource-manager/Microsoft.KubernetesConfiguration/privateLinkScopes",
+    "sdkPath": "sdk/kubernetesconfiguration/arm-kubernetesconfiguration-privatelinkscopes"
+  },
+  "@azure/arm-kusto": {
+    "specPath": "specification/azure-kusto/resource-manager/Microsoft.Kusto/Kusto",
+    "sdkPath": "sdk/kusto/arm-kusto"
+  },
+  "@azure/arm-labservices": {
+    "sdkPath": "sdk/labservices/arm-labservices"
+  },
+  "@azure/arm-lambdatesthyperexecute": {
+    "specPath": "specification/liftrhyperexecute/LambdaTest.HyperExecute.Management",
+    "sdkPath": "sdk/lambdatesthyperexecute/arm-lambdatesthyperexecute"
+  },
+  "@azure/arm-largeinstance": {
+    "sdkPath": "sdk/largeinstance/arm-largeinstance"
+  },
+  "@azure/arm-links": {
+    "sdkPath": "sdk/links/arm-links"
+  },
+  "@azure/arm-loadtesting": {
+    "specPath": "specification/loadtestservice/resource-manager/Microsoft.LoadTestService/loadtesting",
+    "sdkPath": "sdk/loadtesting/arm-loadtesting"
+  },
+  "@azure/arm-locks": {
+    "sdkPath": "sdk/locks/arm-locks"
+  },
+  "@azure/arm-locks-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/locks/arm-locks-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-logic": {
+    "specPath": "specification/logic/resource-manager/Microsoft.Logic/Logic",
+    "sdkPath": "sdk/logic/arm-logic"
+  },
+  "@azure/arm-machinelearning": {
+    "specPath": "specification/machinelearningservices/MachineLearningServices.Management",
+    "sdkPath": "sdk/machinelearning/arm-machinelearning"
+  },
+  "@azure/arm-machinelearningcompute": {
+    "sdkPath": "sdk/machinelearningcompute/arm-machinelearningcompute"
+  },
+  "@azure/arm-machinelearningexperimentation": {
+    "sdkPath": "sdk/machinelearningexperimentation/arm-machinelearningexperimentation"
+  },
+  "@azure/arm-maintenance": {
+    "specPath": "specification/maintenance/resource-manager/Microsoft.Maintenance/Maintenance",
+    "sdkPath": "sdk/maintenance/arm-maintenance"
+  },
+  "@azure/arm-managedapplications": {
+    "sdkPath": "sdk/managedapplications/arm-managedapplications"
+  },
+  "@azure/arm-managednetworkfabric": {
+    "specPath": "specification/managednetworkfabric/ManagedNetworkFabric.ResourceManager.Management",
+    "sdkPath": "sdk/managednetworkfabric/arm-managednetworkfabric"
+  },
+  "@azure/arm-managedops": {
+    "specPath": "specification/managedoperations/ManagedOps.Management",
+    "sdkPath": "sdk/managedops/arm-managedops"
+  },
+  "@azure/arm-managementgroups": {
+    "specPath": "specification/management/resource-manager/Microsoft.Management/ManagementGroups",
+    "sdkPath": "sdk/managementgroups/arm-managementgroups"
+  },
+  "@azure/arm-managementpartner": {
+    "sdkPath": "sdk/managementpartner/arm-managementpartner"
+  },
+  "@azure/arm-maps": {
+    "specPath": "specification/maps/resource-manager/Microsoft.Maps/Maps",
+    "sdkPath": "sdk/maps/arm-maps"
+  },
+  "@azure/arm-mariadb": {
+    "sdkPath": "sdk/mariadb/arm-mariadb"
+  },
+  "@azure/arm-marketplace": {
+    "specPath": "specification/marketplace/resource-manager/Microsoft.Marketplace/Marketplace",
+    "sdkPath": "sdk/marketplace/arm-marketplace"
+  },
+  "@azure/arm-marketplaceordering": {
+    "sdkPath": "sdk/marketplaceordering/arm-marketplaceordering"
+  },
+  "@azure/arm-migrate": {
+    "specPath": "specification/migrate/AssessmentProjects.Management/MachineAssessments.Management",
+    "sdkPath": "sdk/migrate/arm-migrate"
+  },
+  "@azure/arm-migrationassessment": {
+    "sdkPath": "sdk/migrate/arm-migrationassessment"
+  },
+  "@azure/arm-migrationdiscovery": {
+    "specPath": "specification/migrate/OffAzure.Management"
+  },
+  "@azure/arm-migrationdiscoverysap": {
+    "specPath": "specification/workloads/Workloads.SAPDiscoverySite.Management",
+    "sdkPath": "sdk/migrationdiscovery/arm-migrationdiscoverysap"
+  },
+  "@azure/arm-mongocluster": {
+    "specPath": "specification/mongocluster/resource-manager/Microsoft.DocumentDB/MongoCluster",
+    "sdkPath": "sdk/mongocluster/arm-mongocluster"
+  },
+  "@azure/arm-mongodbatlas": {
+    "specPath": "specification/liftrmongodb/MongoDB.Atlas.Management",
+    "sdkPath": "sdk/mongodbatlas/arm-mongodbatlas"
+  },
+  "@azure/arm-monitor": {
+    "specPath": "specification/monitor/resource-manager/Microsoft.Insights/Insights",
+    "sdkPath": "sdk/monitor/arm-monitor"
+  },
+  "@azure/arm-monitor-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/monitor/arm-monitor-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-monitorpipelinegroups": {
+    "specPath": "specification/monitoringservice/resource-manager/Microsoft.Monitor/PipelineGroups"
+  },
+  "@azure/arm-monitorslis": {
+    "specPath": "specification/monitoringservice/resource-manager/Microsoft.Monitor/Slis",
+    "sdkPath": "sdk/monitor/arm-monitorslis"
+  },
+  "@azure/arm-monitorworkspaces": {
+    "specPath": "specification/monitoringservice/resource-manager/Microsoft.Monitor/Accounts"
+  },
+  "@azure/arm-msi": {
+    "specPath": "specification/msi/resource-manager/Microsoft.ManagedIdentity/ManagedIdentity",
+    "sdkPath": "sdk/msi/arm-msi"
+  },
+  "@azure/arm-mysql": {
+    "sdkPath": "sdk/mysql/arm-mysql"
+  },
+  "@azure/arm-mysql-flexible": {
+    "specPath": "specification/mysql/resource-manager/Microsoft.DBforMySQL/FlexibleServers",
+    "sdkPath": "sdk/mysql/arm-mysql-flexible"
+  },
+  "@azure/arm-napstercompanionapi": {
+    "specPath": "specification/napster/Napster.CompanionAPI.Management"
+  },
+  "@azure/arm-netapp": {
+    "specPath": "specification/netapp/resource-manager/Microsoft.NetApp/NetApp",
+    "sdkPath": "sdk/netapp/arm-netapp"
+  },
+  "@azure/arm-network": {
+    "specPath": "specification/network/resource-manager/Microsoft.Network/Network",
+    "sdkPath": "sdk/network/arm-network"
+  },
+  "@azure/arm-network-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/network/arm-network-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-networkcloud": {
+    "specPath": "specification/networkcloud/NetworkCloud.Management",
+    "sdkPath": "sdk/networkcloud/arm-networkcloud"
+  },
+  "@azure/arm-networkfunction": {
+    "specPath": "specification/networkfunction/resource-manager/Microsoft.NetworkFunction/TrafficCollector"
+  },
+  "@azure/arm-newrelicobservability": {
+    "specPath": "specification/newrelic/NewRelicObservability.Management",
+    "sdkPath": "sdk/newrelicobservability/arm-newrelicobservability"
+  },
+  "@azure/arm-nginx": {
+    "specPath": "specification/nginx/Nginx.Management",
+    "sdkPath": "sdk/nginx/arm-nginx"
+  },
+  "@azure/arm-notificationhubs": {
+    "specPath": "specification/notificationhubs/resource-manager/Microsoft.NotificationHubs/NotificationHubs",
+    "sdkPath": "sdk/notificationhubs/arm-notificationhubs"
+  },
+  "@azure/arm-oep": {
+    "sdkPath": "sdk/oep/arm-oep"
+  },
+  "@azure/arm-onlineexperimentation": {
+    "specPath": "specification/onlineexperimentation/OnlineExperimentation.Management",
+    "sdkPath": "sdk/onlineexperimentation/arm-onlineexperimentation"
+  },
+  "@azure/arm-operationalinsights": {
+    "specPath": "specification/operationalinsights/resource-manager/Microsoft.OperationalInsights/OperationalInsights",
+    "sdkPath": "sdk/operationalinsights/arm-operationalinsights"
+  },
+  "@azure/arm-operations": {
+    "sdkPath": "sdk/operationsmanagement/arm-operations"
+  },
+  "@azure/arm-oracledatabase": {
+    "specPath": "specification/oracle/Oracle.Database.Management",
+    "sdkPath": "sdk/oracledatabase/arm-oracledatabase"
+  },
+  "@azure/arm-orbital": {
+    "sdkPath": "sdk/orbital/arm-orbital"
+  },
+  "@azure/arm-paloaltonetworksngfw": {
+    "specPath": "specification/paloaltonetworks/PaloAltoNetworks.Management",
+    "sdkPath": "sdk/paloaltonetworksngfw/arm-paloaltonetworksngfw"
+  },
+  "@azure/arm-peering": {
+    "specPath": "specification/peering/resource-manager/Microsoft.Peering/Peering",
+    "sdkPath": "sdk/peering/arm-peering"
+  },
+  "@azure/arm-pineconevectordb": {
+    "specPath": "specification/liftrpinecone/Pinecone.VectorDb.Management",
+    "sdkPath": "sdk/pineconevectordb/arm-pineconevectordb"
+  },
+  "@azure/arm-planetarycomputer": {
+    "specPath": "specification/orbitalplanetarycomputer/Orbital.Management",
+    "sdkPath": "sdk/planetarycomputer/arm-planetarycomputer"
+  },
+  "@azure/arm-playwright": {
+    "specPath": "specification/loadtestservice/resource-manager/Microsoft.LoadTestService/playwright",
+    "sdkPath": "sdk/playwright/arm-playwright"
+  },
+  "@azure/arm-playwrighttesting": {
+    "specPath": "specification/playwrighttesting/PlaywrightTesting.Management"
+  },
+  "@azure/arm-policy": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Authorization/policy",
+    "sdkPath": "sdk/policy/arm-policy"
+  },
+  "@azure/arm-policy-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/policy/arm-policy-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-policyinsights": {
+    "specPath": "specification/policyinsights/resource-manager/Microsoft.PolicyInsights/PolicyInsights",
+    "sdkPath": "sdk/policyinsights/arm-policyinsights"
+  },
+  "@azure/arm-portal": {
+    "sdkPath": "sdk/portal/arm-portal"
+  },
+  "@azure/arm-portalservicescopilot": {
+    "specPath": "specification/portalservices/CopilotSettings.Management",
+    "sdkPath": "sdk/portalservices/arm-portalservicescopilot"
+  },
+  "@azure/arm-postgresql": {
+    "sdkPath": "sdk/postgresql/arm-postgresql"
+  },
+  "@azure/arm-postgresql-flexible": {
+    "specPath": "specification/postgresql/DBforPostgreSQL.Management",
+    "sdkPath": "sdk/postgresql/arm-postgresql-flexible"
+  },
+  "@azure/arm-postgresqlhsc": {
+    "specPath": "specification/postgresqlhsc/resource-manager/Microsoft.DBforPostgreSQL/PostgresqlHsc"
+  },
+  "@azure/arm-powerbidedicated": {
+    "specPath": "specification/powerbidedicated/resource-manager/Microsoft.PowerBIdedicated/PowerBIDedicated",
+    "sdkPath": "sdk/powerbidedicated/arm-powerbidedicated"
+  },
+  "@azure/arm-powerbiembedded": {
+    "sdkPath": "sdk/powerbiembedded/arm-powerbiembedded"
+  },
+  "@azure/arm-previewalertrule": {
+    "specPath": "specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/PreviewAlertRule",
+    "sdkPath": "sdk/previewalertrule/arm-previewalertrule"
+  },
+  "@azure/arm-privatedns": {
+    "specPath": "specification/privatedns/resource-manager/Microsoft.Network/PrivateDns",
+    "sdkPath": "sdk/privatedns/arm-privatedns"
+  },
+  "@azure/arm-programmableconnectivity": {
+    "specPath": "specification/programmableconnectivity/ProgrammableConnectivity.Management",
+    "sdkPath": "sdk/programmableconnectivity/arm-programmableconnectivity"
+  },
+  "@azure/arm-prometheusrulegroups": {
+    "specPath": "specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/PrometheusRuleGroups",
+    "sdkPath": "sdk/prometheusrulegroups/arm-prometheusrulegroups"
+  },
+  "@azure/arm-providerhub": {
+    "specPath": "specification/providerhub/ProviderHub.Management",
+    "sdkPath": "sdk/providerhub/arm-providerhub"
+  },
+  "@azure/arm-purestorageblock": {
+    "specPath": "specification/purestorage/PureStorage.Block.Management",
+    "sdkPath": "sdk/purestorageblock/arm-purestorageblock"
+  },
+  "@azure/arm-purview": {
+    "specPath": "specification/purview/resource-manager/Microsoft.Purview/Purview",
+    "sdkPath": "sdk/purview/arm-purview"
+  },
+  "@azure/arm-quantum": {
+    "sdkPath": "sdk/quantum/arm-quantum"
+  },
+  "@azure/arm-qumulo": {
+    "specPath": "specification/liftrqumulo/Qumulo.Storage.Management",
+    "sdkPath": "sdk/liftrqumulo/arm-qumulo"
+  },
+  "@azure/arm-quota": {
+    "specPath": "specification/quota/resource-manager/Microsoft.Quota/Quota",
+    "sdkPath": "sdk/quota/arm-quota"
+  },
+  "@azure/arm-recoveryservices": {
+    "specPath": "specification/recoveryservices/resource-manager/Microsoft.RecoveryServices/RecoveryServices",
+    "sdkPath": "sdk/recoveryservices/arm-recoveryservices"
+  },
+  "@azure/arm-recoveryservices-siterecovery": {
+    "specPath": "specification/recoveryservicessiterecovery/resource-manager/Microsoft.RecoveryServices/SiteRecovery",
+    "sdkPath": "sdk/recoveryservicessiterecovery/arm-recoveryservices-siterecovery"
+  },
+  "@azure/arm-recoveryservicesbackup": {
+    "specPath": "specification/recoveryservicesbackup/resource-manager/Microsoft.RecoveryServices/RecoveryServicesBackup",
+    "sdkPath": "sdk/recoveryservicesbackup/arm-recoveryservicesbackup"
+  },
+  "@azure/arm-recoveryservicesdatareplication": {
+    "specPath": "specification/recoveryservicesdatareplication/resource-manager/Microsoft.DataReplication/DataReplication",
+    "sdkPath": "sdk/recoveryservicesdatareplication/arm-recoveryservicesdatareplication"
+  },
+  "@azure/arm-redhatopenshift": {
+    "specPath": "specification/redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/OpenShiftClusters",
+    "sdkPath": "sdk/redhatopenshift/arm-redhatopenshift"
+  },
+  "@azure/arm-rediscache": {
+    "specPath": "specification/redis/resource-manager/Microsoft.Cache/Redis",
+    "sdkPath": "sdk/redis/arm-rediscache"
+  },
+  "@azure/arm-redisenterprisecache": {
+    "specPath": "specification/redisenterprise/resource-manager/Microsoft.Cache/RedisEnterprise",
+    "sdkPath": "sdk/redisenterprise/arm-redisenterprisecache"
+  },
+  "@azure/arm-relationships": {
+    "specPath": "specification/relationships/Relationships.Management",
+    "sdkPath": "sdk/relationships/arm-relationships"
+  },
+  "@azure/arm-relay": {
+    "specPath": "specification/relay/resource-manager/Microsoft.Relay/Relay",
+    "sdkPath": "sdk/relay/arm-relay"
+  },
+  "@azure/arm-reservations": {
+    "specPath": "specification/reservations/resource-manager/Microsoft.Capacity/Reservations",
+    "sdkPath": "sdk/reservations/arm-reservations"
+  },
+  "@azure/arm-resourceconnector": {
+    "specPath": "specification/resourceconnector/resource-manager/Microsoft.ResourceConnector/ResourceConnector",
+    "sdkPath": "sdk/resourceconnector/arm-resourceconnector"
+  },
+  "@azure/arm-resourcegraph": {
+    "specPath": "specification/resourcegraph/resource-manager/Microsoft.ResourceGraph/ResourceGraph",
+    "sdkPath": "sdk/resourcegraph/arm-resourcegraph"
+  },
+  "@azure/arm-resourcehealth": {
+    "specPath": "specification/resourcehealth/resource-manager/Microsoft.ResourceHealth/ResourceHealth",
+    "sdkPath": "sdk/resourcehealth/arm-resourcehealth"
+  },
+  "@azure/arm-resourcemover": {
+    "sdkPath": "sdk/resourcemover/arm-resourcemover"
+  },
+  "@azure/arm-resources": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/resources",
+    "sdkPath": "sdk/resources/arm-resources"
+  },
+  "@azure/arm-resources-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/resources/arm-resources-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-resources-subscriptions": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/subscriptions",
+    "sdkPath": "sdk/resources-subscriptions/arm-resources-subscriptions"
+  },
+  "@azure/arm-resourcesbicep": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/bicep",
+    "sdkPath": "sdk/resources/arm-resourcesbicep"
+  },
+  "@azure/arm-resourcesdeployments": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/deployments",
+    "sdkPath": "sdk/resources/arm-resourcesdeployments"
+  },
+  "@azure/arm-resourcesdeploymentscripts": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/deploymentScripts"
+  },
+  "@azure/arm-resourcesdeploymentstacks": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/deploymentStacks",
+    "sdkPath": "sdk/resourcesdeploymentstacks/arm-resourcesdeploymentstacks"
+  },
+  "@azure/arm-resourcesvalidation": {
+    "specPath": "specification/resources/resource-manager/Microsoft.Resources/resourceValidator"
+  },
+  "@azure/arm-reviews": {
+    "specPath": "specification/marketplacecatalog/resource-manager/Microsoft.Marketplace/Reviews"
+  },
+  "@azure/arm-sapmonitors": {
+    "specPath": "specification/workloads/Workloads.SAPMonitor.Management"
+  },
+  "@azure/arm-scvmm": {
+    "specPath": "specification/scvmm/ScVmm.Management",
+    "sdkPath": "sdk/scvmm/arm-scvmm"
+  },
+  "@azure/arm-search": {
+    "specPath": "specification/search/resource-manager/Microsoft.Search/Search",
+    "sdkPath": "sdk/search/arm-search"
+  },
+  "@azure/arm-secretsstoreextension": {
+    "specPath": "specification/ews/SecretSyncController.Management"
+  },
+  "@azure/arm-security": {
+    "specPath": "specification/security/resource-manager/Microsoft.Security/Security",
+    "sdkPath": "sdk/security/arm-security"
+  },
+  "@azure/arm-securitydevops": {
+    "sdkPath": "sdk/securitydevops/arm-securitydevops"
+  },
+  "@azure/arm-securityinsight": {
+    "specPath": "specification/securityinsights/resource-manager/Microsoft.SecurityInsights/SecurityInsights",
+    "sdkPath": "sdk/securityinsight/arm-securityinsight"
+  },
+  "@azure/arm-selfhelp": {
+    "specPath": "specification/help/resource-manager/Microsoft.Help/Help",
+    "sdkPath": "sdk/selfhelp/arm-selfhelp"
+  },
+  "@azure/arm-serialconsole": {
+    "specPath": "specification/serialconsole/resource-manager/Microsoft.SerialConsole/SerialConsole",
+    "sdkPath": "sdk/serialconsole/arm-serialconsole"
+  },
+  "@azure/arm-servicebus": {
+    "specPath": "specification/servicebus/resource-manager/Microsoft.ServiceBus/ServiceBus",
+    "sdkPath": "sdk/servicebus/arm-servicebus"
+  },
+  "@azure/arm-servicefabric": {
+    "specPath": "specification/servicefabric/resource-manager/Microsoft.ServiceFabric/ServiceFabric",
+    "sdkPath": "sdk/servicefabric/arm-servicefabric"
+  },
+  "@azure/arm-servicefabricmanagedclusters": {
+    "specPath": "specification/servicefabricmanagedclusters/resource-manager/Microsoft.ServiceFabric/ServiceFabricManagedClusters"
+  },
+  "@azure/arm-servicefabricmesh": {
+    "sdkPath": "sdk/servicefabricmesh/arm-servicefabricmesh"
+  },
+  "@azure/arm-servicegroups": {
+    "specPath": "specification/management/resource-manager/Microsoft.Management/ServiceGroups",
+    "sdkPath": "sdk/servicegroups/arm-servicegroups"
+  },
+  "@azure/arm-servicelinker": {
+    "sdkPath": "sdk/servicelinker/arm-servicelinker"
+  },
+  "@azure/arm-servicenetworking": {
+    "specPath": "specification/servicenetworking/resource-manager/Microsoft.ServiceNetworking/ServiceNetworking",
+    "sdkPath": "sdk/servicenetworking/arm-servicenetworking"
+  },
+  "@azure/arm-signalr": {
+    "specPath": "specification/signalr/resource-manager/Microsoft.SignalRService/SignalRService",
+    "sdkPath": "sdk/signalr/arm-signalr"
+  },
+  "@azure/arm-sitemanager": {
+    "specPath": "specification/edge/Microsoft.Edge.Sites.Management",
+    "sdkPath": "sdk/sitemanager/arm-sitemanager"
+  },
+  "@azure/arm-sphere": {
+    "specPath": "specification/sphere/Sphere.Management",
+    "sdkPath": "sdk/sphere/arm-sphere"
+  },
+  "@azure/arm-springappdiscovery": {
+    "sdkPath": "sdk/springappdiscovery/arm-springappdiscovery"
+  },
+  "@azure/arm-sql": {
+    "specPath": "specification/sql/resource-manager/Microsoft.Sql/SQL",
+    "sdkPath": "sdk/sql/arm-sql"
+  },
+  "@azure/arm-sqlvirtualmachine": {
+    "specPath": "specification/sqlvirtualmachine/resource-manager/Microsoft.SqlVirtualMachine/SqlVirtualMachine",
+    "sdkPath": "sdk/sqlvirtualmachine/arm-sqlvirtualmachine"
+  },
+  "@azure/arm-sreagent": {
+    "specPath": "specification/app/resource-manager/Microsoft.App/SreAgent"
+  },
+  "@azure/arm-standbypool": {
+    "specPath": "specification/standbypool/StandbyPool.Management",
+    "sdkPath": "sdk/standbypool/arm-standbypool"
+  },
+  "@azure/arm-storage": {
+    "specPath": "specification/storage/Storage.Management",
+    "sdkPath": "sdk/storage/arm-storage"
+  },
+  "@azure/arm-storage-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/storage/arm-storage-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-storageactions": {
+    "specPath": "specification/storageactions/StorageAction.Management",
+    "sdkPath": "sdk/storageactions/arm-storageactions"
+  },
+  "@azure/arm-storagecache": {
+    "specPath": "specification/storagecache/resource-manager/Microsoft.StorageCache/StorageCache",
+    "sdkPath": "sdk/storagecache/arm-storagecache"
+  },
+  "@azure/arm-storagediscovery": {
+    "specPath": "specification/storagediscovery/Microsoft.StorageDiscovery.Management",
+    "sdkPath": "sdk/storagediscovery/arm-storagediscovery"
+  },
+  "@azure/arm-storageimportexport": {
+    "sdkPath": "sdk/storageimportexport/arm-storageimportexport"
+  },
+  "@azure/arm-storagemover": {
+    "specPath": "specification/storagemover/StorageMover.Management",
+    "sdkPath": "sdk/storagemover/arm-storagemover"
+  },
+  "@azure/arm-storagesync": {
+    "specPath": "specification/storagesync/resource-manager/Microsoft.StorageSync/StorageSync",
+    "sdkPath": "sdk/storagesync/arm-storagesync"
+  },
+  "@azure/arm-storsimple1200series": {
+    "sdkPath": "sdk/storsimple1200series/arm-storsimple1200series"
+  },
+  "@azure/arm-storsimple8000series": {
+    "sdkPath": "sdk/storsimple8000series/arm-storsimple8000series"
+  },
+  "@azure/arm-streamanalytics": {
+    "sdkPath": "sdk/streamanalytics/arm-streamanalytics"
+  },
+  "@azure/arm-subscriptions": {
+    "specPath": "specification/subscription/resource-manager/Microsoft.Subscription/Subscription",
+    "sdkPath": "sdk/subscription/arm-subscriptions"
+  },
+  "@azure/arm-subscriptions-profile-2020-09-01-hybrid": {
+    "sdkPath": "sdk/subscription/arm-subscriptions-profile-2020-09-01-hybrid"
+  },
+  "@azure/arm-support": {
+    "specPath": "specification/support/resource-manager/Microsoft.Support/Support",
+    "sdkPath": "sdk/support/arm-support"
+  },
+  "@azure/arm-synapse": {
+    "sdkPath": "sdk/synapse/arm-synapse"
+  },
+  "@azure/arm-templatespecs": {
+    "sdkPath": "sdk/templatespecs/arm-templatespecs"
+  },
+  "@azure/arm-tenantactivitylogalerts": {
+    "specPath": "specification/alertsmanagement/resource-manager/Microsoft.AlertsManagement/TenantActivityLogAlerts",
+    "sdkPath": "sdk/tenantactivitylogalerts/arm-tenantactivitylogalerts"
+  },
+  "@azure/arm-terraform": {
+    "specPath": "specification/terraform/Microsoft.AzureTerraform.Management",
+    "sdkPath": "sdk/terraform/arm-terraform"
+  },
+  "@azure/arm-timeseriesinsights": {
+    "sdkPath": "sdk/timeseriesinsights/arm-timeseriesinsights"
+  },
+  "@azure/arm-trafficmanager": {
+    "specPath": "specification/trafficmanager/resource-manager/Microsoft.Network/TrafficManager",
+    "sdkPath": "sdk/trafficmanager/arm-trafficmanager"
+  },
+  "@azure/arm-trustedsigning": {
+    "sdkPath": "sdk/trustedsigning/arm-trustedsigning"
+  },
+  "@azure/arm-verifiedid": {
+    "specPath": "specification/verifiedid/Microsoft.VerifiedId.Management"
+  },
+  "@azure/arm-virtualenclaves": {
+    "specPath": "specification/mission/Mission.Management"
+  },
+  "@azure/arm-visualstudio": {
+    "sdkPath": "sdk/visualstudio/arm-visualstudio"
+  },
+  "@azure/arm-vmwarecloudsimple": {
+    "sdkPath": "sdk/vmwarecloudsimple/arm-vmwarecloudsimple"
+  },
+  "@azure/arm-voiceservices": {
+    "sdkPath": "sdk/voiceservices/arm-voiceservices"
+  },
+  "@azure/arm-webpubsub": {
+    "specPath": "specification/webpubsub/resource-manager/Microsoft.SignalRService/SignalRService",
+    "sdkPath": "sdk/web-pubsub/arm-webpubsub"
+  },
+  "@azure/arm-webservices": {
+    "sdkPath": "sdk/machinelearning/arm-webservices"
+  },
+  "@azure/arm-weightsandbiases": {
+    "specPath": "specification/liftrweightsandbiases/Liftr.WeightsAndBiases.Management",
+    "sdkPath": "sdk/liftrweightsandbiases/arm-weightsandbiases"
+  },
+  "@azure/arm-widget": {
+    "specPath": "eng/tools/spec-gen-sdk-runner/test/fixtures/specification/service2/resource-manager/Microsoft.Service2/WidgetManagement2"
+  },
+  "@azure/arm-workloadorchestration": {
+    "specPath": "specification/edge/Microsoft.Edge.ConfigurationManager.Management",
+    "sdkPath": "sdk/workloadorchestration/arm-workloadorchestration"
+  },
+  "@azure/arm-workloads": {
+    "sdkPath": "sdk/workloads/arm-workloads"
+  },
+  "@azure/arm-workloadssapvirtualinstance": {
+    "specPath": "specification/workloads/Workloads.SAPVirtualInstance.Management",
+    "sdkPath": "sdk/workloads/arm-workloadssapvirtualinstance"
+  },
+  "@azure/arm-workspaces": {
+    "sdkPath": "sdk/machinelearning/arm-workspaces"
+  }
+}
