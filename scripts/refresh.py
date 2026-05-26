@@ -42,6 +42,10 @@ SDK_REPO = "azure-sdk-for-js"
 SPECS_OWNER = "Azure"
 SPECS_REPO = "azure-rest-api-specs"
 
+# URL of the previously-deployed dashboard data. Used by load_previous_rows
+# so that Released rows can be carried over without re-fetching their state.
+PUBLISHED_DATA_URL = "https://jialinhuang803.github.io/arm-refresh-tracker/data.json"
+
 VERSIONS_ENUM_RE = re.compile(r"enum\s+Versions\s*\{([^}]+)\}", re.DOTALL)
 TITLE_PKG_RE = re.compile(r"\[AutoPR @azure-arm-([a-z0-9-]+)\]", re.IGNORECASE)
 
@@ -189,8 +193,14 @@ def derive_release_status(
     package_name: str,
     sdk_path: str | None,
 ) -> str:
-    # Refresh PR state drives the status (closed-unmerged PRs are filtered
-    # out upstream in fetch_refresh_prs, so `pr` is always None / open / merged).
+    # An open Self-Service Release PR only overrides Not Started.
+    # If the package already shipped as TypeSpec (sdkIsTypeSpec=True),
+    # the open self-service PR is for the next version — keep it Released.
+    if pr is not None and pr.get("kind") == "self-service":
+        if sdk_is_ts:
+            return "Released"
+        return "In Progress"
+    # Refresh PR state drives the status (closed-unmerged are filtered upstream).
     if pr is not None:
         if pr.get("state") == "open":
             return "In Progress"
@@ -199,9 +209,52 @@ def derive_release_status(
             if version and is_published_on_npm(session, package_name, version):
                 return "Released"
             return "To Release"
-    # No refresh PR (or closed-unmerged): already TypeSpec on main -> Released
-    # (self-served); otherwise Not Started.
     return "Released" if sdk_is_ts else "Not Started"
+
+
+def load_previous_rows(session) -> dict[str, dict]:
+    """Return previous { sdkPackageName: row } so already-Released rows stick.
+
+    Prefers a local site/data.json (handy for dev), otherwise falls back to
+    the deployed dashboard JSON. On the very first run, returns an empty map.
+    """
+    raw_data = None
+    source = ""
+    if OUTPUT.exists():
+        try:
+            raw_data = json.loads(OUTPUT.read_text(encoding="utf-8"))
+            source = "local site/data.json"
+        except json.JSONDecodeError:
+            pass
+    if raw_data is None:
+        try:
+            resp = session.get(PUBLISHED_DATA_URL, timeout=30)
+            if resp.status_code == 200:
+                raw_data = resp.json()
+                source = "deployed Pages"
+        except Exception:
+            pass
+    if raw_data is None:
+        print("[prev] no previous data.json available; all rows will be re-evaluated.")
+        return {}
+    rows = raw_data.get("rows", [])
+    by_pkg: dict[str, dict] = {}
+    for r in rows:
+        pkg = r.get("sdkPackageName")
+        if pkg:
+            by_pkg[pkg] = r
+    print(f"[prev] loaded {len(by_pkg)} previous row(s) from {source}.")
+    return by_pkg
+
+
+def _row_from_brownfield(row: dict, **dynamic) -> dict:
+    return {
+        "service": row["service"],
+        "armNamespace": row["armNamespace"],
+        "specFolder": row["specFolder"],
+        "sdkPackageName": row["sdkPackageName"],
+        **dynamic,
+    }
 
 
 def build_rows(session) -> list[dict]:
@@ -209,43 +262,64 @@ def build_rows(session) -> list[dict]:
     if not INDEX.exists():
         raise SystemExit(f"missing {INDEX}; run scripts/build_index.py first.")
     index = json.loads(INDEX.read_text(encoding="utf-8"))
-    refresh_prs = fetch_refresh_prs(session)
-    self_service_prs = fetch_self_service_prs(session)
+    previous = load_previous_rows(session)
 
-    rows: list[dict] = []
-    total = len(brownfield)
-    for i, row in enumerate(brownfield, 1):
+    # Partition rows: those whose previous status was 'Released' stick, the
+    # rest need a fresh evaluation.
+    sticky: list[tuple[int, dict]] = []
+    pending: list[tuple[int, dict]] = []
+    for i, row in enumerate(brownfield):
         pkg = row["sdkPackageName"]
-        entry = index.get(pkg, {}) if pkg else {}
-        spec_path = entry.get("specPath")
-        sdk_path = entry.get("sdkPath")
+        prev = previous.get(pkg) if pkg else None
+        if prev and prev.get("releaseStatus") == "Released":
+            sticky.append((i, prev))
+        else:
+            pending.append((i, row))
 
-        sdk_is_ts = sdk_is_typespec(session, sdk_path) if pkg else False
-        specs_ver = fetch_specs_api_version(session, spec_path)
-        # An open Self-Service Release PR takes precedence over the refresh PR
-        # for this row: it represents the active release attempt, so the row
-        # should be marked In Progress / self-serve and link the self-service PR.
-        pr = None
-        if pkg:
-            pr = self_service_prs.get(pkg) or refresh_prs.get(pkg)
-        release_by = derive_release_by(pr, sdk_is_ts)
-        release_status = derive_release_status(session, pr, sdk_is_ts, pkg or "", sdk_path)
+    print(f"[rows] {len(sticky)} sticky Released, {len(pending)} to re-evaluate.")
 
-        rows.append(
-            {
-                "service": row["service"],
-                "armNamespace": row["armNamespace"],
-                "specFolder": row["specFolder"],
-                "sdkPackageName": pkg,
-                "specsApiVersion": specs_ver,
-                "sdkPr": pr,
-                "releaseStatus": release_status,
-                "releaseBy": release_by,
-            }
+    results: dict[int, dict] = {}
+    for i, prev in sticky:
+        row = brownfield[i]
+        results[i] = _row_from_brownfield(
+            row,
+            specsApiVersion=prev.get("specsApiVersion", ""),
+            sdkPr=prev.get("sdkPr"),
+            releaseStatus="Released",
+            releaseBy=prev.get("releaseBy", ""),
         )
-        if i % 25 == 0 or i == total:
-            print(f"[rows]   processed {i}/{total}")
-    return rows
+
+    if pending:
+        refresh_prs = fetch_refresh_prs(session)
+        self_service_prs = fetch_self_service_prs(session)
+        total = len(pending)
+        for processed, (i, row) in enumerate(pending, 1):
+            pkg = row["sdkPackageName"]
+            entry = index.get(pkg, {}) if pkg else {}
+            spec_path = entry.get("specPath")
+            sdk_path = entry.get("sdkPath")
+
+            sdk_is_ts = sdk_is_typespec(session, sdk_path) if pkg else False
+            specs_ver = fetch_specs_api_version(session, spec_path)
+            pr = None
+            if pkg:
+                pr = self_service_prs.get(pkg) or refresh_prs.get(pkg)
+            release_by = derive_release_by(pr, sdk_is_ts)
+            release_status = derive_release_status(session, pr, sdk_is_ts, pkg or "", sdk_path)
+
+            results[i] = _row_from_brownfield(
+                row,
+                specsApiVersion=specs_ver,
+                sdkPr=pr,
+                releaseStatus=release_status,
+                releaseBy=release_by,
+            )
+            if processed % 25 == 0 or processed == total:
+                print(f"[rows]   processed {processed}/{total}")
+    else:
+        print("[rows] no rows needed re-evaluation — skipping all API calls.")
+
+    return [results[i] for i in range(len(brownfield))]
 
 
 def main() -> None:
