@@ -264,12 +264,6 @@
     "sdkPackageName": "@azure/arm-webpubsub"
   },
   {
-    "service": "Compute Recommender",
-    "armNamespace": "Microsoft.Compute",
-    "specFolder": "compute/Recommender",
-    "sdkPackageName": null
-  },
-  {
     "service": "Liftr-Dynatrace",
     "armNamespace": "dynatrace.observability",
     "specFolder": "dynatrace",
@@ -729,7 +723,7 @@
     "service": "Application Insights",
     "armNamespace": "Microsoft.Insights",
     "specFolder": "monitor/Microsoft.Insights",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-appinsights"
   },
   {
     "service": "Azure Log Analytics",
@@ -789,13 +783,13 @@
     "service": "Azure Resource Manager",
     "armNamespace": "Microsoft.Resources",
     "specFolder": "resources/Microsoft.Resources/resources",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-resources"
   },
   {
     "service": "Azure Hybrid Data",
     "armNamespace": "Microsoft.AzureArcData",
     "specFolder": "azurearcdata",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-azurearcdata"
   },
   {
     "service": "Azure Databricks",
@@ -837,7 +831,7 @@
     "service": "Azure Migrate",
     "armNamespace": "Microsoft.OffAzure",
     "specFolder": "migrate/resource-manager/Microsoft.OffAzure",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-migrationdiscovery"
   },
   {
     "service": "Quartz Governance Services (Power Platform)",
@@ -861,43 +855,31 @@
     "service": "Managed Application",
     "armNamespace": "Microsoft.Solutions",
     "specFolder": "solutions",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-managedapplications"
   },
   {
     "service": "Azure Deployments",
     "armNamespace": "Microsoft.Resources",
     "specFolder": "resources/Microsoft.Resources/deployments",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-resourcesdeployments"
   },
   {
     "service": "Azure Resource Manager - DataBoundaries",
     "armNamespace": "Microsoft.Resources",
     "specFolder": "resources/Microsoft.Resources/databoundaries",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-databoundaries"
   },
   {
     "service": "Azure Resource Manager - Subscriptions",
     "armNamespace": "Microsoft.Resources",
     "specFolder": "resources/Microsoft.Resources/subscriptions",
-    "sdkPackageName": null
-  },
-  {
-    "service": "Azure Resource Manager - Bicep",
-    "armNamespace": "Microsoft.Resources",
-    "specFolder": "resources/Microsoft.Resources/bicep",
-    "sdkPackageName": null
-  },
-  {
-    "service": "Azure Resource Manager - DeploymentStacks",
-    "armNamespace": "Microsoft.Resources",
-    "specFolder": "resources/Microsoft.Resources/deploymentstakcs",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-resources-subscriptions"
   },
   {
     "service": "Group RP",
     "armNamespace": "Microsoft.Management",
     "specFolder": "management/Microsoft.Management/ServiceGroups",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-servicegroups"
   },
   {
     "service": "Custom Location",
