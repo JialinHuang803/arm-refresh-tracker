@@ -3,8 +3,9 @@ name: Refresh ARM SDK Tracker
 on:
   schedule:
     # Every 3 hours from 09:17 to 21:17 UTC+8 (= 01:17, 04:17, 07:17, 10:17, 13:17 UTC).
-    # Off-the-hour minute avoids top-of-hour cron congestion on GitHub-hosted runners.
-    - cron: "17 1,4,7,10,13 * * *"
+    # Backup fire 20 minutes later to mitigate GitHub's best-effort schedule trigger
+    # (we routinely see one or two slots a day skipped even when Actions is healthy).
+    - cron: "17,37 1,4,7,10,13 * * *"
   push:
     branches: [main]
     paths:
