@@ -6,12 +6,6 @@
     "sdkPackageName": "@azure/arm-storageactions"
   },
   {
-    "service": "Bing Search APIs",
-    "armNamespace": "Microsoft.Bing",
-    "specFolder": "bing",
-    "sdkPackageName": null
-  },
-  {
     "service": "Reservations RP",
     "armNamespace": "Microsoft.BillingBenefits",
     "specFolder": "billingbenefits",
@@ -382,12 +376,6 @@
     "armNamespace": "Microsoft.Dashboard",
     "specFolder": "dashboard",
     "sdkPackageName": "@azure/arm-dashboard"
-  },
-  {
-    "service": "AIOps Orchestration",
-    "armNamespace": "Microsoft.HybridNetwork",
-    "specFolder": "hybridnetwork",
-    "sdkPackageName": "@azure/arm-hybridnetwork"
   },
   {
     "service": "Project Vienna Services",
@@ -786,12 +774,6 @@
     "sdkPackageName": "@azure/arm-resources"
   },
   {
-    "service": "Azure Hybrid Data",
-    "armNamespace": "Microsoft.AzureArcData",
-    "specFolder": "azurearcdata",
-    "sdkPackageName": "@azure/arm-azurearcdata"
-  },
-  {
     "service": "Azure Databricks",
     "armNamespace": "Microsoft.Databricks",
     "specFolder": "databricks",
@@ -828,12 +810,6 @@
     "sdkPackageName": "@azure/arm-imagebuilder"
   },
   {
-    "service": "Azure Migrate",
-    "armNamespace": "Microsoft.OffAzure",
-    "specFolder": "migrate/resource-manager/Microsoft.OffAzure",
-    "sdkPackageName": "@azure/arm-migrationdiscovery"
-  },
-  {
     "service": "Quartz Governance Services (Power Platform)",
     "armNamespace": "Microsoft.PowerPlatform",
     "specFolder": "powerplatform",
@@ -850,12 +826,6 @@
     "armNamespace": "Microsoft.SerialConsole",
     "specFolder": "serialconsole",
     "sdkPackageName": "@azure/arm-serialconsole"
-  },
-  {
-    "service": "Managed Application",
-    "armNamespace": "Microsoft.Solutions",
-    "specFolder": "solutions",
-    "sdkPackageName": "@azure/arm-managedapplications"
   },
   {
     "service": "Azure Deployments",
