@@ -94,6 +94,40 @@ def sdk_is_typespec(session, sdk_path: str | None) -> bool:
     return file_exists(session, SDK_OWNER, SDK_REPO, f"{sdk_path}/tsp-location.yaml")
 
 
+_PKG_NAME_RE = re.compile(r"^@azure/arm-([a-z0-9-]+)$")
+
+
+def resolve_sdk_path(session, package_name: str, indexed: str | None) -> str | None:
+    """Return a usable sdkPath for this package, even if the index lacks one.
+
+    Strategy:
+      1. If `indexed` (from package-index.json) is set, trust it.
+      2. Otherwise try the natural location: sdk/{suffix}/arm-{suffix}/package.json.
+         If `package.json` exists there with the matching name, use that path.
+      3. Otherwise return None — the package likely doesn't exist in the repo yet.
+
+    Result is cached in-process to avoid re-probing on subsequent rows.
+    """
+    if indexed:
+        return indexed
+    if package_name in _SDK_PATH_CACHE:
+        return _SDK_PATH_CACHE[package_name]
+    m = _PKG_NAME_RE.match(package_name or "")
+    if not m:
+        _SDK_PATH_CACHE[package_name] = None
+        return None
+    suffix = m.group(1)
+    guess = f"sdk/{suffix}/arm-{suffix}"
+    if file_exists(session, SDK_OWNER, SDK_REPO, f"{guess}/package.json"):
+        _SDK_PATH_CACHE[package_name] = guess
+        return guess
+    _SDK_PATH_CACHE[package_name] = None
+    return None
+
+
+_SDK_PATH_CACHE: dict[str, str | None] = {}
+
+
 def _find_oldest_commit_sha(session, file_path: str) -> str | None:
     """Return the SHA of the very first commit on main that touched file_path.
 
@@ -209,9 +243,13 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
 
 
 def _pr_adds_file(session, pr_number: int, file_path: str) -> bool:
-    """Return True if `file_path` is added/renamed (i.e. newly present) in this PR."""
+    """Return True if `file_path` is added/renamed (i.e. newly present) in this PR.
+
+    GitHub caps `/pulls/{n}/files` at 3000 files (30 pages × 100). First-typespec
+    migration PRs commonly add 1000–2500 files, so we have to walk all pages.
+    """
     page = 1
-    while page <= 10:  # PRs >1000 changed files are vanishingly rare here
+    while page <= 30:
         resp = gh_get(
             session,
             f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}/files",
@@ -224,10 +262,10 @@ def _pr_adds_file(session, pr_number: int, file_path: str) -> bool:
         if not files:
             return False
         for f in files:
-            if f.get("filename") == file_path and f.get("status") in ("added", "renamed", "modified"):
-                # First-typespec-migration adds the file. If a PR modifies it
-                # in a TS package, we'd never reach here (tsp-location.yaml
-                # already on main goes down the other branch).
+            if f.get("filename") == file_path:
+                # We only care about "this PR introduces the file" — added/renamed.
+                # Modified means the file was already on main, which is the other
+                # branch in build_rows.
                 return f.get("status") in ("added", "renamed")
         if len(files) < 100:
             return False
@@ -308,7 +346,7 @@ def build_rows(session) -> list[dict]:
         pkg = row.get("sdkPackageName")
         entry = index.get(pkg, {}) if pkg else {}
         spec_path = entry.get("specPath")
-        sdk_path = entry.get("sdkPath")
+        sdk_path = resolve_sdk_path(session, pkg, entry.get("sdkPath")) if pkg else None
 
         specs_ver = fetch_specs_api_version(session, spec_path)
         sdk_pr: dict | None = None

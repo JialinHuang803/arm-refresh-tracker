@@ -421,7 +421,8 @@
     "specPath": "specification/edgemarketplace/Microsoft.EdgeMarketPlace.Management"
   },
   "@azure/arm-edgeorder": {
-    "specPath": "specification/edgeorder/resource-manager/Microsoft.EdgeOrder/EdgeOrder"
+    "specPath": "specification/edgeorder/resource-manager/Microsoft.EdgeOrder/EdgeOrder",
+    "sdkPath": "sdk/edgeorder/arm-edgeorder"
   },
   "@azure/arm-edgezones": {
     "specPath": "specification/edgezones/EdgeZones.Management",
@@ -727,7 +728,8 @@
     "sdkPath": "sdk/networkcloud/arm-networkcloud"
   },
   "@azure/arm-networkfunction": {
-    "specPath": "specification/networkfunction/resource-manager/Microsoft.NetworkFunction/TrafficCollector"
+    "specPath": "specification/networkfunction/resource-manager/Microsoft.NetworkFunction/TrafficCollector",
+    "sdkPath": "sdk/networkfunction/arm-networkfunction"
   },
   "@azure/arm-newrelicobservability": {
     "specPath": "specification/newrelic/NewRelicObservability.Management",
@@ -988,7 +990,8 @@
     "sdkPath": "sdk/servicefabric/arm-servicefabric"
   },
   "@azure/arm-servicefabricmanagedclusters": {
-    "specPath": "specification/servicefabricmanagedclusters/resource-manager/Microsoft.ServiceFabric/ServiceFabricManagedClusters"
+    "specPath": "specification/servicefabricmanagedclusters/resource-manager/Microsoft.ServiceFabric/ServiceFabricManagedClusters",
+    "sdkPath": "sdk/servicefabricmanagedclusters/arm-servicefabricmanagedclusters"
   },
   "@azure/arm-servicefabricmesh": {
     "sdkPath": "sdk/servicefabricmesh/arm-servicefabricmesh"
