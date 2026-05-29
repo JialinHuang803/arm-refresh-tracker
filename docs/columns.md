@@ -5,63 +5,90 @@ The dashboard publishes one row per tracked SDK package. Source data:
 - [`data/brownfield.json`](../data/brownfield.json) — the curated list (manually maintained).
 - [`scripts/lib/package-index.json`](../scripts/lib/package-index.json) — built by `scripts/build_index.py`, maps each `@azure/arm-*` package to its spec folder in `Azure/azure-rest-api-specs` and its SDK folder in `Azure/azure-sdk-for-js`.
 
-| # | Column | Source | Notes |
-|---|---|---|---|
-| 1 | **Service** | `brownfield.json` | Pass-through. |
-| 2 | **ARM Namespace** | `brownfield.json` | Pass-through. |
-| 3 | **Spec Folder** | `brownfield.json` | Top-level subfolder under `specification/` in azure-rest-api-specs. |
-| 4 | **SDK Package Name** | `brownfield.json` | One row per package; multi-package services are pre-expanded. |
-| 5 | **Specs API Version** | Raw fetch of `{specPath}/main.tsp` on `azure-rest-api-specs@main`. Reads the last value of `enum Versions {…}`. | Blank if no TypeSpec spec is authored. |
-| 6 | **SDK PR** | Two GitHub searches per run: `repo:Azure/azure-sdk-for-js is:pr label:refresh` and `repo:Azure/azure-sdk-for-js is:pr is:open label:"Self-Service Release"`. PR titles (both kinds) match the pattern `[AutoPR @azure-arm-<name>]…`, which is parsed back to `@azure/arm-<name>`. **Closed-but-not-merged refresh PRs are dropped**, and only **open** Self-Service Release PRs are tracked (merged self-service PRs become TypeSpec on main, already captured by `sdkIsTypeSpec`). | If both kinds exist for a package, the **open Self-Service Release PR wins**; otherwise the most recently updated refresh PR wins. |
-| 7 | **Release Status** | Derived (see below). | Color-coded badge. |
-| 8 | **Release By** | Derived (see below). | |
-
-## Release Status (column 7)
-
-`sdkIsTypeSpec` is determined by checking whether `{sdkPath}/tsp-location.yaml` exists on `azure-sdk-for-js@main`. `pr` is the chosen PR for this package (open self-service > refresh; closed-unmerged refresh PRs are filtered out upstream), so the table below assumes `pr` is `null` / open / merged.
-
-Evaluation order (first match wins):
-
-| # | Condition | Release Status |
+| # | Column | Source |
 |---|---|---|
-| 1 | row was **Released** in the previous run | **Released** (sticky — see below) |
-| 2 | `pr.kind == "self-service"` && `sdkIsTypeSpec == true` | **Released** (open PR is for the next version) |
-| 3 | `pr.kind == "self-service"` && `sdkIsTypeSpec == false` | **In Progress** |
-| 4 | refresh `pr.state == "open"` | **In Progress** |
-| 5 | refresh `pr.merged == true` && exact `package.json` version is published on npm | **Released** |
-| 6 | refresh `pr.merged == true` && version is **not** on npm yet | **To Release** |
-| 7 | `pr == null` && `sdkIsTypeSpec == true` | **Released** (self-served) |
-| 8 | `pr == null` && `sdkIsTypeSpec == false` | **Not Started** |
+| 1 | **Service** | `brownfield.json` (pass-through) |
+| 2 | **ARM Namespace** | `brownfield.json` (pass-through) |
+| 3 | **Spec Folder** | `brownfield.json` (pass-through) |
+| 4 | **SDK Package Name** | `brownfield.json`; multi-package services are pre-expanded into one row per package |
+| 5 | **Specs API Version** | Raw fetch of `{specPath}/main.tsp` on `azure-rest-api-specs@main`; reads the last value of `enum Versions {…}`. Blank if no TypeSpec spec is authored. |
+| 6 | **SDK PR** | See below. |
+| 7 | **Release Status** | See below. |
+| 8 | **Release By** | Labels on the chosen SDK PR. |
 
-### Sticky Released
+## SDK PR (column 6) and Release Status (column 7)
 
-Once a row is **Released**, future runs reuse the entire previous snapshot for that row (specsApiVersion, sdkPr link, releaseBy) and skip all per-row API calls. The "previous snapshot" is loaded from `site/data.json` if present locally, otherwise fetched from the deployed Pages URL.
+For each row, the workflow checks the SDK repo (`Azure/azure-sdk-for-js@main`)
+to decide whether the package has already been migrated to TypeSpec:
 
-This means new spec API versions or new self-service PRs are **not** reflected for already-Released rows. If you need to force a re-evaluation, delete the package from `data/brownfield.json` and add it back, or run with the local `site/data.json` deleted and patch the deployed JSON.
+`sdkIsTypeSpec = exists("{sdkPath}/tsp-location.yaml" on main)`
+
+### If `sdkIsTypeSpec == true`
+
+The migration PR is found by walking the commit history of
+`{sdkPath}/tsp-location.yaml`:
+
+1. `GET /repos/.../commits?path={sdkPath}/tsp-location.yaml&per_page=1` and
+   follow the `Link: rel="last"` header to the oldest page → the **first**
+   commit that touched the file.
+2. `GET /repos/.../commits/{sha}/pulls` → the PR that introduced it (the
+   squash-merge PR if applicable).
+3. `GET {sdkPath}/package.json` at that commit SHA → `versionAtMerge`.
+
+That PR is reported as **SDK PR**.
+
+Release Status is then:
+
+| Condition | Release Status |
+|---|---|
+| `versionAtMerge` is published on npm | **Released** |
+| `versionAtMerge` is not on npm yet | **To Release** |
+
+### If `sdkIsTypeSpec == false`
+
+The workflow looks for an open, non-draft AutoPR PR that adds
+`{sdkPath}/tsp-location.yaml`:
+
+1. One batched search: `repo:Azure/azure-sdk-for-js is:pr is:open draft:false "[AutoPR @azure-arm-" in:title` (paginated).
+2. Titles are parsed with `\[AutoPR @azure-arm-([a-z0-9-]+)\]` → grouped by package name.
+3. For the candidate PR, `GET /pulls/{n}/files` verifies that
+   `{sdkPath}/tsp-location.yaml` is added/renamed in this PR (filters out
+   accidental matches).
+
+That PR (if any) is reported as **SDK PR**.
+
+Release Status is then:
+
+| Condition | Release Status |
+|---|---|
+| matching open non-draft PR found | **In Progress** |
+| no such PR | **Not Started** |
 
 ## Release By (column 8)
 
-| Condition | Release By |
+Derived from labels on the chosen SDK PR (see column 6):
+
+| Labels | Release By |
 |---|---|
-| sticky Released (carried over from previous run) | (whatever was previously recorded) |
-| open Self-Service Release PR | `self-serve` |
-| refresh PR (open or merged) and no self-service PR | `refresh` |
-| no PR && `sdkIsTypeSpec == true` | `self-serve` |
-| no PR && `sdkIsTypeSpec == false` | blank |
+| includes `refresh` | `refresh` |
+| includes both `first-typespec-migration` and `Self-Service Release` | `self-serve` |
+| no SDK PR, or labels don't match | empty |
 
 ## Last Updated banner
 
-Captured once at the start of `scripts/refresh.py` and stored as `generatedAt` at the top of `site/data.json`. Rendered in the dashboard header.
+Captured once at the start of `scripts/refresh.py` and stored as
+`generatedAt` at the top of `site/data.json`. Rendered in the dashboard header.
 
 ## API budget
 
-Per workflow run, when the index cache is warm and there are *N* non-sticky rows:
+Per workflow run, for *N* rows (~144 today):
 
-- 1 GET on `https://jialinhuang803.github.io/arm-refresh-tracker/data.json` (the previous snapshot).
-- 1–3 search calls (the refresh-PR search, paginated) **only if at least one row is non-sticky**.
-- 1 search call (the open Self-Service Release PR search) **only if at least one row is non-sticky**.
-- ~1 raw fetch per non-sticky row (Specs API Version).
-- ~1 contents call per non-sticky row (tsp-location.yaml existence).
-- ~2 calls per merged refresh PR in those *N* (package.json version + npm registry).
+- 1 paginated search call (open AutoPR PRs).
+- ~1 raw fetch per row (Specs API Version, skipped if no specPath).
+- ~1 contents call per row (`tsp-location.yaml` existence check).
+- ~3 calls per TypeSpec-migrated row (oldest-commit lookup + PR-from-commit + raw `package.json`) plus 1 npm registry call.
+- ~1 `/pulls/{n}/files` call per row that matched the open-PR map.
 
-In steady state most rows are sticky-Released, so *N* shrinks over time and runs get cheaper.
+In practice this is well under the 5,000 req/hr authenticated budget.
+There is **no** sticky / carried-over logic — every run is recomputed
+from scratch so newly merged or newly opened PRs are always reflected.

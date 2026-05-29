@@ -4,11 +4,26 @@ Reads:
   - data/brownfield.json (curated list, one row per package)
   - scripts/lib/package-index.json (built by build_index.py)
 
-For each row, computes:
-  - specsApiVersion (from main.tsp in azure-rest-api-specs)
-  - sdkPr (from the refresh-PR map)
-  - sdkIsTypeSpec (existence of tsp-location.yaml on azure-sdk-for-js@main)
-  - releaseStatus, releaseBy (derived per plan.md)
+Per-row workflow (see docs/columns.md for full rationale):
+
+  1. If sdk/<path>/tsp-location.yaml exists on main:
+       - Find the FIRST PR that introduced that file on main.
+       - Read package.json at that PR's introducing commit -> versionAtMerge.
+       - If versionAtMerge is published on npm  -> Released
+         else                                   -> To Release
+       sdkPr = that introducing PR.
+
+  2. Otherwise (no tsp-location.yaml on main):
+       - Look for an open, non-draft AutoPR PR for this package that ADDS
+         sdk/<path>/tsp-location.yaml.
+       - If such PR exists                       -> In Progress
+         else                                    -> Not Started
+       sdkPr = that open PR (if any).
+
+Release By, in both branches, comes from the labels on sdkPr:
+  - 'refresh' label present                              -> "refresh"
+  - 'first-typespec-migration' + 'Self-Service Release'  -> "self-serve"
+  - otherwise                                            -> ""
 
 Writes site/data.json containing { "generatedAt": "...", "rows": [...] }.
 """
@@ -27,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lib.github_api import (  # noqa: E402
     file_exists,
     get_raw_file,
+    gh_get,
     make_session,
     npm_package_versions,
     search_issues,
@@ -42,13 +58,14 @@ SDK_REPO = "azure-sdk-for-js"
 SPECS_OWNER = "Azure"
 SPECS_REPO = "azure-rest-api-specs"
 
-# URL of the previously-deployed dashboard data. Used by load_previous_rows
-# so that Released rows can be carried over without re-fetching their state.
-PUBLISHED_DATA_URL = "https://jialinhuang803.github.io/arm-refresh-tracker/data.json"
-
 VERSIONS_ENUM_RE = re.compile(r"enum\s+Versions\s*\{([^}]+)\}", re.DOTALL)
 TITLE_PKG_RE = re.compile(r"\[AutoPR @azure-arm-([a-z0-9-]+)\]", re.IGNORECASE)
+LINK_LAST_RE = re.compile(r'<[^>]*[?&]page=(\d+)[^>]*>;\s*rel="last"')
 
+
+# ---------------------------------------------------------------------------
+# specs api version
+# ---------------------------------------------------------------------------
 
 def _latest_version_from_tsp(text: str) -> str:
     m = VERSIONS_ENUM_RE.search(text)
@@ -56,92 +73,6 @@ def _latest_version_from_tsp(text: str) -> str:
         return ""
     versions = re.findall(r'"([^"]+)"', m.group(1))
     return versions[-1] if versions else ""
-
-
-def fetch_refresh_prs(session) -> dict[str, dict]:
-    """Search refresh-labeled PRs and map packageName -> PR object.
-
-    Only merged or still-open PRs are kept: closed-unmerged PRs were
-    abandoned/superseded and would just clutter the dashboard with broken
-    links, so we treat them the same as 'no refresh PR'.
-    """
-    print("[prs] searching refresh-labeled PRs…")
-    items = search_issues(
-        session,
-        query=f"repo:{SDK_OWNER}/{SDK_REPO} is:pr label:refresh",
-    )
-    print(f"[prs]   {len(items)} PR(s) found.")
-    out: dict[str, dict] = {}
-    skipped_closed_unmerged = 0
-    for it in items:
-        title = it.get("title", "")
-        m = TITLE_PKG_RE.search(title)
-        if not m:
-            continue
-        state = it.get("state", "")
-        merged = bool(it.get("pull_request", {}).get("merged_at"))
-        if state == "closed" and not merged:
-            skipped_closed_unmerged += 1
-            continue
-        pkg_name = f"@azure/arm-{m.group(1)}"
-        pr_obj = {
-            "number": it["number"],
-            "url": it["html_url"],
-            "title": title,
-            "state": state,
-            "merged": merged,
-            "mergedAt": it.get("pull_request", {}).get("merged_at"),
-            "updatedAt": it.get("updated_at"),
-            "labels": [lbl.get("name", "") for lbl in it.get("labels", [])],
-            "kind": "refresh",
-        }
-        # Keep most recently updated if duplicate
-        prev = out.get(pkg_name)
-        if prev is None or (pr_obj["updatedAt"] or "") > (prev["updatedAt"] or ""):
-            out[pkg_name] = pr_obj
-    print(f"[prs]   mapped to {len(out)} package(s) (skipped {skipped_closed_unmerged} closed-unmerged).")
-    return out
-
-
-def fetch_self_service_prs(session) -> dict[str, dict]:
-    """Search OPEN 'Self-Service Release'-labeled PRs and map packageName -> PR.
-
-    Self-service release PRs are also created by the AutoPR bot with the same
-    title pattern as refresh PRs, so the same regex back-maps to the package
-    name. We only look at open ones — merged self-service releases land on
-    main as TypeSpec code, which is already covered by the sdkIsTypeSpec
-    branch in derive_release_status. Closed-unmerged ones are abandoned and
-    not actionable.
-    """
-    print("[prs] searching open Self-Service Release PRs…")
-    items = search_issues(
-        session,
-        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:open label:"Self-Service Release"',
-    )
-    print(f"[prs]   {len(items)} PR(s) found.")
-    out: dict[str, dict] = {}
-    for it in items:
-        title = it.get("title", "")
-        m = TITLE_PKG_RE.search(title)
-        if not m:
-            continue
-        pkg_name = f"@azure/arm-{m.group(1)}"
-        pr_obj = {
-            "number": it["number"],
-            "url": it["html_url"],
-            "title": title,
-            "state": it.get("state", ""),
-            "merged": False,
-            "mergedAt": None,
-            "updatedAt": it.get("updated_at"),
-            "labels": [lbl.get("name", "") for lbl in it.get("labels", [])],
-            "kind": "self-service",
-        }
-        prev = out.get(pkg_name)
-        if prev is None or (pr_obj["updatedAt"] or "") > (prev["updatedAt"] or ""):
-            out[pkg_name] = pr_obj
-    print(f"[prs]   mapped to {len(out)} package(s).")
-    return out
 
 
 def fetch_specs_api_version(session, spec_path: str | None) -> str:
@@ -153,99 +84,204 @@ def fetch_specs_api_version(session, spec_path: str | None) -> str:
     return _latest_version_from_tsp(text)
 
 
+# ---------------------------------------------------------------------------
+# tsp-location.yaml presence + first-introducing PR
+# ---------------------------------------------------------------------------
+
 def sdk_is_typespec(session, sdk_path: str | None) -> bool:
     if not sdk_path:
         return False
     return file_exists(session, SDK_OWNER, SDK_REPO, f"{sdk_path}/tsp-location.yaml")
 
 
-def sdk_main_version(session, sdk_path: str | None) -> str | None:
-    if not sdk_path:
+def _find_oldest_commit_sha(session, file_path: str) -> str | None:
+    """Return the SHA of the very first commit on main that touched file_path.
+
+    Uses the commits list API with per_page=1 + Link rel="last" header to
+    jump straight to the oldest entry instead of paginating through history.
+    """
+    resp = gh_get(
+        session,
+        f"/repos/{SDK_OWNER}/{SDK_REPO}/commits",
+        params={"path": file_path, "per_page": "1"},
+        allow_404=True,
+    )
+    if resp is None:
         return None
-    text = get_raw_file(session, SDK_OWNER, SDK_REPO, f"{sdk_path}/package.json")
+    items = resp.json()
+    if not items:
+        return None
+    link = resp.headers.get("Link", "")
+    m = LINK_LAST_RE.search(link)
+    if not m:
+        # only one page total -> the single item is also the oldest
+        return items[0].get("sha")
+    last_page = int(m.group(1))
+    resp = gh_get(
+        session,
+        f"/repos/{SDK_OWNER}/{SDK_REPO}/commits",
+        params={"path": file_path, "per_page": "1", "page": str(last_page)},
+        allow_404=True,
+    )
+    if resp is None:
+        return None
+    items = resp.json()
+    if not items:
+        return None
+    return items[0].get("sha")
+
+
+def _pr_for_commit(session, sha: str) -> dict | None:
+    resp = gh_get(
+        session,
+        f"/repos/{SDK_OWNER}/{SDK_REPO}/commits/{sha}/pulls",
+        allow_404=True,
+    )
+    if resp is None:
+        return None
+    prs = resp.json()
+    if not prs:
+        return None
+    # If multiple PRs include this commit (rare), prefer the earliest merged one.
+    prs.sort(key=lambda p: (p.get("merged_at") or "9999", p.get("number") or 0))
+    return prs[0]
+
+
+def _version_at_commit(session, sdk_path: str, sha: str) -> str:
+    text = get_raw_file(session, SDK_OWNER, SDK_REPO, f"{sdk_path}/package.json", ref=sha)
     if not text:
-        return None
+        return ""
     try:
-        return json.loads(text).get("version") or None
+        return (json.loads(text).get("version") or "").strip()
     except json.JSONDecodeError:
+        return ""
+
+
+def find_first_tsp_pr(session, sdk_path: str) -> dict | None:
+    """Find the PR that first added sdk/<path>/tsp-location.yaml on main."""
+    file_path = f"{sdk_path}/tsp-location.yaml"
+    sha = _find_oldest_commit_sha(session, file_path)
+    if not sha:
         return None
+    pr = _pr_for_commit(session, sha)
+    if not pr:
+        return None
+    return {
+        "number": pr["number"],
+        "url": pr["html_url"],
+        "title": pr.get("title", ""),
+        "state": pr.get("state", "closed"),
+        "merged": pr.get("merged_at") is not None,
+        "mergedAt": pr.get("merged_at"),
+        "updatedAt": pr.get("updated_at"),
+        "labels": [lbl.get("name", "") for lbl in pr.get("labels", [])],
+        "introducingSha": sha,
+        "versionAtMerge": _version_at_commit(session, sdk_path, sha),
+    }
 
 
-def is_published_on_npm(session, package_name: str, version: str) -> bool:
-    info = npm_package_versions(session, package_name)
-    if not info:
-        return False
-    return version in (info.get("versions") or {})
+# ---------------------------------------------------------------------------
+# open AutoPR PRs (one batched search, then per-package verification)
+# ---------------------------------------------------------------------------
+
+def fetch_open_autopr_prs(session) -> dict[str, dict]:
+    """Map packageName -> most-recently-updated open, non-draft AutoPR PR.
+
+    A single search call covers every package; we filter and group locally.
+    """
+    print("[prs] searching open non-draft AutoPR PRs…")
+    items = search_issues(
+        session,
+        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:open draft:false in:title "[AutoPR @azure-arm-"',
+    )
+    print(f"[prs]   {len(items)} candidate PR(s).")
+    out: dict[str, dict] = {}
+    for it in items:
+        m = TITLE_PKG_RE.search(it.get("title", ""))
+        if not m:
+            continue
+        pkg = f"@azure/arm-{m.group(1)}"
+        prev = out.get(pkg)
+        if prev is None or (it.get("updated_at") or "") > (prev.get("updated_at") or ""):
+            out[pkg] = it
+    print(f"[prs]   grouped into {len(out)} package(s).")
+    return out
 
 
-def derive_release_by(pr: dict | None, sdk_is_ts: bool) -> str:
-    if pr is not None:
-        return "self-serve" if pr.get("kind") == "self-service" else "refresh"
-    if sdk_is_ts:
+def _pr_adds_file(session, pr_number: int, file_path: str) -> bool:
+    """Return True if `file_path` is added/renamed (i.e. newly present) in this PR."""
+    page = 1
+    while page <= 10:  # PRs >1000 changed files are vanishingly rare here
+        resp = gh_get(
+            session,
+            f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}/files",
+            params={"per_page": "100", "page": page},
+            allow_404=True,
+        )
+        if resp is None:
+            return False
+        files = resp.json()
+        if not files:
+            return False
+        for f in files:
+            if f.get("filename") == file_path and f.get("status") in ("added", "renamed", "modified"):
+                # First-typespec-migration adds the file. If a PR modifies it
+                # in a TS package, we'd never reach here (tsp-location.yaml
+                # already on main goes down the other branch).
+                return f.get("status") in ("added", "renamed")
+        if len(files) < 100:
+            return False
+        page += 1
+    return False
+
+
+def find_open_tsp_pr(
+    session, package_name: str, sdk_path: str, open_pr_map: dict[str, dict]
+) -> dict | None:
+    candidate = open_pr_map.get(package_name)
+    if not candidate:
+        return None
+    file_path = f"{sdk_path}/tsp-location.yaml"
+    if not _pr_adds_file(session, candidate["number"], file_path):
+        return None
+    return {
+        "number": candidate["number"],
+        "url": candidate["html_url"],
+        "title": candidate.get("title", ""),
+        "state": "open",
+        "merged": False,
+        "mergedAt": None,
+        "updatedAt": candidate.get("updated_at"),
+        "labels": [lbl.get("name", "") for lbl in candidate.get("labels", [])],
+    }
+
+
+# ---------------------------------------------------------------------------
+# release status / release-by derivation
+# ---------------------------------------------------------------------------
+
+def derive_release_by(labels: list[str]) -> str:
+    s = {lbl for lbl in labels}
+    if "refresh" in s:
+        return "refresh"
+    if "first-typespec-migration" in s and "Self-Service Release" in s:
         return "self-serve"
     return ""
 
 
-def derive_release_status(
-    session,
-    pr: dict | None,
-    sdk_is_ts: bool,
-    package_name: str,
-    sdk_path: str | None,
-) -> str:
-    # An open Self-Service Release PR only overrides Not Started.
-    # If the package already shipped as TypeSpec (sdkIsTypeSpec=True),
-    # the open self-service PR is for the next version — keep it Released.
-    if pr is not None and pr.get("kind") == "self-service":
-        if sdk_is_ts:
-            return "Released"
-        return "In Progress"
-    # Refresh PR state drives the status (closed-unmerged are filtered upstream).
-    if pr is not None:
-        if pr.get("state") == "open":
-            return "In Progress"
-        if pr.get("merged"):
-            version = sdk_main_version(session, sdk_path)
-            if version and is_published_on_npm(session, package_name, version):
-                return "Released"
-            return "To Release"
-    return "Released" if sdk_is_ts else "Not Started"
+def is_published_on_npm(session, package_name: str, version: str, npm_cache: dict) -> bool:
+    if not version:
+        return False
+    info = npm_cache.get(package_name)
+    if info is None:
+        info = npm_package_versions(session, package_name) or {}
+        npm_cache[package_name] = info
+    return version in (info.get("versions") or {})
 
 
-def load_previous_rows(session) -> dict[str, dict]:
-    """Return previous { sdkPackageName: row } so already-Released rows stick.
-
-    Prefers a local site/data.json (handy for dev), otherwise falls back to
-    the deployed dashboard JSON. On the very first run, returns an empty map.
-    """
-    raw_data = None
-    source = ""
-    if OUTPUT.exists():
-        try:
-            raw_data = json.loads(OUTPUT.read_text(encoding="utf-8"))
-            source = "local site/data.json"
-        except json.JSONDecodeError:
-            pass
-    if raw_data is None:
-        try:
-            resp = session.get(PUBLISHED_DATA_URL, timeout=30)
-            if resp.status_code == 200:
-                raw_data = resp.json()
-                source = "deployed Pages"
-        except Exception:
-            pass
-    if raw_data is None:
-        print("[prev] no previous data.json available; all rows will be re-evaluated.")
-        return {}
-    rows = raw_data.get("rows", [])
-    by_pkg: dict[str, dict] = {}
-    for r in rows:
-        pkg = r.get("sdkPackageName")
-        if pkg:
-            by_pkg[pkg] = r
-    print(f"[prev] loaded {len(by_pkg)} previous row(s) from {source}.")
-    return by_pkg
-
+# ---------------------------------------------------------------------------
+# row builder
+# ---------------------------------------------------------------------------
 
 def _row_from_brownfield(row: dict, **dynamic) -> dict:
     return {
@@ -262,65 +298,58 @@ def build_rows(session) -> list[dict]:
     if not INDEX.exists():
         raise SystemExit(f"missing {INDEX}; run scripts/build_index.py first.")
     index = json.loads(INDEX.read_text(encoding="utf-8"))
-    previous = load_previous_rows(session)
 
-    # Partition rows: those whose previous status was 'Released' stick, the
-    # rest need a fresh evaluation.
-    sticky: list[tuple[int, dict]] = []
-    pending: list[tuple[int, dict]] = []
-    for i, row in enumerate(brownfield):
-        pkg = row["sdkPackageName"]
-        prev = previous.get(pkg) if pkg else None
-        if prev and prev.get("releaseStatus") == "Released":
-            sticky.append((i, prev))
-        else:
-            pending.append((i, row))
+    open_pr_map = fetch_open_autopr_prs(session)
 
-    print(f"[rows] {len(sticky)} sticky Released, {len(pending)} to re-evaluate.")
+    npm_cache: dict[str, dict] = {}
+    results: list[dict] = []
+    total = len(brownfield)
+    for i, row in enumerate(brownfield, 1):
+        pkg = row.get("sdkPackageName")
+        entry = index.get(pkg, {}) if pkg else {}
+        spec_path = entry.get("specPath")
+        sdk_path = entry.get("sdkPath")
 
-    results: dict[int, dict] = {}
-    for i, prev in sticky:
-        row = brownfield[i]
-        results[i] = _row_from_brownfield(
-            row,
-            specsApiVersion=prev.get("specsApiVersion", ""),
-            sdkPr=prev.get("sdkPr"),
-            releaseStatus="Released",
-            releaseBy=prev.get("releaseBy", ""),
-        )
+        specs_ver = fetch_specs_api_version(session, spec_path)
+        sdk_pr: dict | None = None
+        release_status = "Not Started"
+        release_by = ""
 
-    if pending:
-        refresh_prs = fetch_refresh_prs(session)
-        self_service_prs = fetch_self_service_prs(session)
-        total = len(pending)
-        for processed, (i, row) in enumerate(pending, 1):
-            pkg = row["sdkPackageName"]
-            entry = index.get(pkg, {}) if pkg else {}
-            spec_path = entry.get("specPath")
-            sdk_path = entry.get("sdkPath")
+        if sdk_path and pkg and sdk_is_typespec(session, sdk_path):
+            tsp_pr = find_first_tsp_pr(session, sdk_path)
+            sdk_pr = tsp_pr
+            version = (tsp_pr or {}).get("versionAtMerge", "")
+            if version and is_published_on_npm(session, pkg, version, npm_cache):
+                release_status = "Released"
+            else:
+                release_status = "To Release"
+            release_by = derive_release_by((tsp_pr or {}).get("labels", []))
+        elif sdk_path and pkg:
+            open_pr = find_open_tsp_pr(session, pkg, sdk_path, open_pr_map)
+            if open_pr is not None:
+                sdk_pr = open_pr
+                release_status = "In Progress"
+                release_by = derive_release_by(open_pr.get("labels", []))
 
-            sdk_is_ts = sdk_is_typespec(session, sdk_path) if pkg else False
-            specs_ver = fetch_specs_api_version(session, spec_path)
-            pr = None
-            if pkg:
-                pr = self_service_prs.get(pkg) or refresh_prs.get(pkg)
-            release_by = derive_release_by(pr, sdk_is_ts)
-            release_status = derive_release_status(session, pr, sdk_is_ts, pkg or "", sdk_path)
-
-            results[i] = _row_from_brownfield(
+        results.append(
+            _row_from_brownfield(
                 row,
                 specsApiVersion=specs_ver,
-                sdkPr=pr,
+                sdkPr=sdk_pr,
                 releaseStatus=release_status,
                 releaseBy=release_by,
             )
-            if processed % 25 == 0 or processed == total:
-                print(f"[rows]   processed {processed}/{total}")
-    else:
-        print("[rows] no rows needed re-evaluation — skipping all API calls.")
+        )
 
-    return [results[i] for i in range(len(brownfield))]
+        if i % 10 == 0 or i == total:
+            print(f"[rows]   processed {i}/{total}")
 
+    return results
+
+
+# ---------------------------------------------------------------------------
+# entry point
+# ---------------------------------------------------------------------------
 
 def main() -> None:
     if not os.environ.get("GITHUB_TOKEN"):
