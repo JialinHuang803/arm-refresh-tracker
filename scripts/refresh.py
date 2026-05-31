@@ -320,10 +320,12 @@ def is_published_on_npm(
     True if either:
       - the exact `version` (from package.json at the introducing commit) is
         on npm, OR
-      - some non-alpha version >= `version` exists on npm and was published
-        at-or-after `merged_at` (the introducing PR's merge time). This
-        catches the storagemover-style case where the merged 3.0.0 was
-        never released but 3.0.1 shipped later.
+      - some non-alpha version > `version` exists on npm and was published
+        at-or-after `merged_at` (the introducing PR's merge time), with one
+        carve-out: if `version` is a prerelease (e.g. 4.0.0-beta.3), the
+        plain stable X.Y.Z GA of that same release does NOT count, because
+        Azure SDK teams sometimes ship the GA from the legacy Swagger
+        codebase after abandoning the TypeSpec beta.
 
     The merged_at gate exists to avoid false positives like arm-appservice,
     whose npm registry still carries 30.0.0-beta.x from 2021 — long before
@@ -346,15 +348,28 @@ def is_published_on_npm(
         target = _parse_version(version)
     except Exception:
         return False
+    target_release = target.release
+    target_is_pre = target.is_prerelease
     for v in versions.keys():
         if "alpha" in v.lower():
             continue
         try:
-            if _parse_version(v) < target:
-                continue
+            cand = _parse_version(v)
         except Exception:
             continue
+        if cand < target:
+            continue
         if merged_at and (times.get(v) or "") < merged_at:
+            continue
+        # If versionAtMerge was a prerelease (X.Y.Z-beta.N) but the
+        # candidate is the stable X.Y.Z GA, skip it: in Azure SDK practice
+        # the GA carved off that prerelease line often comes from the
+        # older Swagger codebase, not from the TypeSpec migration.
+        if (
+            target_is_pre
+            and not cand.is_prerelease
+            and cand.release == target_release
+        ):
             continue
         return True
     return False
