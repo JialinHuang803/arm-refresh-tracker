@@ -307,14 +307,63 @@ def derive_release_by(labels: list[str]) -> str:
     return ""
 
 
-def is_published_on_npm(session, package_name: str, version: str, npm_cache: dict) -> bool:
+def is_published_on_npm(
+    session,
+    package_name: str,
+    version: str,
+    npm_cache: dict,
+    *,
+    merged_at: str | None = None,
+) -> bool:
+    """Did the TypeSpec migration actually ship to npm?
+
+    True if either:
+      - the exact `version` (from package.json at the introducing commit) is
+        on npm, OR
+      - some non-alpha version >= `version` exists on npm and was published
+        at-or-after `merged_at` (the introducing PR's merge time). This
+        catches the storagemover-style case where the merged 3.0.0 was
+        never released but 3.0.1 shipped later.
+
+    The merged_at gate exists to avoid false positives like arm-appservice,
+    whose npm registry still carries 30.0.0-beta.x from 2021 — long before
+    the 2026 migration PR. Those stale betas would otherwise satisfy the
+    >= comparison and mark every such package "Released" by accident.
+    """
     if not version:
         return False
     info = npm_cache.get(package_name)
     if info is None:
         info = npm_package_versions(session, package_name) or {}
         npm_cache[package_name] = info
-    return version in (info.get("versions") or {})
+    versions = (info.get("versions") or {})
+    times = info.get("time") or {}
+    if not versions:
+        return False
+    if version in versions:
+        return True
+    try:
+        target = _parse_version(version)
+    except Exception:
+        return False
+    for v in versions.keys():
+        if "alpha" in v.lower():
+            continue
+        try:
+            if _parse_version(v) < target:
+                continue
+        except Exception:
+            continue
+        if merged_at and (times.get(v) or "") < merged_at:
+            continue
+        return True
+    return False
+
+
+def _parse_version(v: str):
+    """Lazy import so test runs without packaging installed still load this module."""
+    from packaging.version import Version  # type: ignore
+    return Version(v)
 
 
 # ---------------------------------------------------------------------------
@@ -357,7 +406,8 @@ def build_rows(session) -> list[dict]:
             tsp_pr = find_first_tsp_pr(session, sdk_path)
             sdk_pr = tsp_pr
             version = (tsp_pr or {}).get("versionAtMerge", "")
-            if version and is_published_on_npm(session, pkg, version, npm_cache):
+            merged_at = (tsp_pr or {}).get("mergedAt")
+            if version and is_published_on_npm(session, pkg, version, npm_cache, merged_at=merged_at):
                 release_status = "Released"
             else:
                 release_status = "To Release"
