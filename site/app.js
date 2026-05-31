@@ -81,11 +81,6 @@
     badge.className = "planner-badge " + cls;
 
     document.getElementById("planner-target-today").textContent = p.targetByToday;
-    document.getElementById("planner-actual").textContent = p.actualByToday;
-    var deltaSpan = document.getElementById("planner-delta");
-    var dlt = p.delta;
-    deltaSpan.textContent = "(" + (dlt >= 0 ? "+" : "") + dlt + " vs target)";
-    deltaSpan.className = "planner-sub " + (dlt >= 0 ? "planner-delta-ahead" : "planner-delta-behind");
     document.getElementById("planner-week-target").textContent = p.targetThisWeekRemaining;
     document.getElementById("planner-pace").textContent = p.requiredPaceToFinish;
     document.getElementById("planner-deadline").textContent = p.deadline;

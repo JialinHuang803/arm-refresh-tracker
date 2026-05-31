@@ -9,69 +9,71 @@
   </head>
   <body>
     <header>
-      <h1>ARM SDK Refresh Tracker</h1>
-      <p class="sub">Status of Swagger → TypeSpec refresh for tracked <code>@azure/arm-*</code> packages.</p>
-      <p class="meta">
-        <span id="lastUpdated">Loading…</span>
-        ·
-        <span id="rowCount"></span>
-        ·
-        <a href="https://github.com/JialinHuang803/arm-refresh-tracker">source</a>
-      </p>
-      <div id="planner" class="planner" hidden>
-        <div class="planner-badge" id="planner-badge">—</div>
-        <div class="planner-fields">
-          <div class="planner-field">
-            <div class="planner-label">Today's quota</div>
-            <div class="planner-value"><span id="planner-target-today">0</span> <span class="planner-sub">target by today</span></div>
+      <div class="header-cols">
+        <div class="header-main">
+          <h1>ARM SDK Refresh Tracker</h1>
+          <p class="sub">Status of Swagger → TypeSpec refresh for tracked <code>@azure/arm-*</code> packages.</p>
+          <p class="meta">
+            <span id="lastUpdated">Loading…</span>
+            ·
+            <span id="rowCount"></span>
+            ·
+            <a href="https://github.com/JialinHuang803/arm-refresh-tracker">source</a>
+          </p>
+          <div id="stats" class="stats" hidden>
+            <div class="stat stat-headline">
+              <div class="stat-value"><span id="stat-released">0</span><span class="stat-divider">/</span><span id="stat-total">0</span></div>
+              <div class="stat-label">Released <span id="stat-percent" class="stat-percent"></span></div>
+              <div class="progress"><div id="stat-bar" class="progress-bar"></div></div>
+            </div>
+            <div class="stat stat-pill stat-to-release">
+              <span class="stat-value" id="stat-to-release">0</span>
+              <span class="stat-label">To Release</span>
+            </div>
+            <div class="stat stat-pill stat-in-progress">
+              <span class="stat-value" id="stat-in-progress">0</span>
+              <span class="stat-label">
+                In Progress
+                <span class="stat-sub" id="stat-in-progress-breakdown"></span>
+              </span>
+            </div>
+            <div class="stat stat-pill stat-not-started">
+              <span class="stat-value" id="stat-not-started">0</span>
+              <span class="stat-label">Not Started</span>
+            </div>
           </div>
-          <div class="planner-field">
-            <div class="planner-label">Done since start</div>
-            <div class="planner-value"><span id="planner-actual">0</span> <span class="planner-sub" id="planner-delta">0</span></div>
+          <div class="filters">
+            <label>Release Status:
+              <select id="filter-status">
+                <option value="">all</option>
+              </select>
+            </label>
+            <label>Release By:
+              <select id="filter-by">
+                <option value="">all</option>
+              </select>
+            </label>
           </div>
-          <div class="planner-field">
-            <div class="planner-label">This week</div>
-            <div class="planner-value"><span id="planner-week-target">0</span> <span class="planner-sub">to ship by Fri</span></div>
+        </div>
+        <aside class="header-side">
+          <div id="planner" class="planner" hidden>
+            <div class="planner-badge" id="planner-badge">—</div>
+            <div class="planner-fields">
+              <div class="planner-field">
+                <div class="planner-label">Today's quota</div>
+                <div class="planner-value"><span id="planner-target-today">0</span> <span class="planner-sub">target by today</span></div>
+              </div>
+              <div class="planner-field">
+                <div class="planner-label">This week</div>
+                <div class="planner-value"><span id="planner-week-target">0</span> <span class="planner-sub">to ship by Fri</span></div>
+              </div>
+              <div class="planner-field">
+                <div class="planner-label">Required pace</div>
+                <div class="planner-value"><span id="planner-pace">0</span> <span class="planner-sub">/day to finish by <span id="planner-deadline">—</span></span></div>
+              </div>
+            </div>
           </div>
-          <div class="planner-field">
-            <div class="planner-label">Required pace</div>
-            <div class="planner-value"><span id="planner-pace">0</span> <span class="planner-sub">/day to finish by <span id="planner-deadline">—</span></span></div>
-          </div>
-        </div>
-      </div>
-      <div id="stats" class="stats" hidden>
-        <div class="stat stat-headline">
-          <div class="stat-value"><span id="stat-released">0</span><span class="stat-divider">/</span><span id="stat-total">0</span></div>
-          <div class="stat-label">Released <span id="stat-percent" class="stat-percent"></span></div>
-          <div class="progress"><div id="stat-bar" class="progress-bar"></div></div>
-        </div>
-        <div class="stat stat-pill stat-to-release">
-          <span class="stat-value" id="stat-to-release">0</span>
-          <span class="stat-label">To Release</span>
-        </div>
-        <div class="stat stat-pill stat-in-progress">
-          <span class="stat-value" id="stat-in-progress">0</span>
-          <span class="stat-label">
-            In Progress
-            <span class="stat-sub" id="stat-in-progress-breakdown"></span>
-          </span>
-        </div>
-        <div class="stat stat-pill stat-not-started">
-          <span class="stat-value" id="stat-not-started">0</span>
-          <span class="stat-label">Not Started</span>
-        </div>
-      </div>
-      <div class="filters">
-        <label>Release Status:
-          <select id="filter-status">
-            <option value="">all</option>
-          </select>
-        </label>
-        <label>Release By:
-          <select id="filter-by">
-            <option value="">all</option>
-          </select>
-        </label>
+        </aside>
       </div>
     </header>
     <main>

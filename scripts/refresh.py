@@ -491,7 +491,7 @@ def build_planner(rows: list[dict]) -> dict | None:
     so `releasedAtStart` is snapshotted from today's count: every Release
     that ships from now on counts toward the daily quota.
     """
-    today = datetime.now(timezone.utc).date()
+    today = datetime.now(timezone(timedelta(hours=8))).date()
     total = len(rows)
     released_total = sum(1 for r in rows if r.get("releaseStatus") == "Released")
     remaining = max(total - released_total, 0)
