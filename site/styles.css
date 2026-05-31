@@ -188,3 +188,38 @@ a:hover { text-decoration: underline; }
 .stat-to-release .stat-value { color: var(--status-to-release-fg); }
 .stat-in-progress .stat-value { color: var(--status-in-progress-fg); }
 .stat-not-started .stat-value { color: var(--status-not-started-fg); }
+
+/* Planner panel */
+.planner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  margin: 12px 0 8px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+.planner-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.planner-ahead { background: var(--status-released-bg); color: var(--status-released-fg); }
+.planner-behind { background: var(--status-not-started-bg); color: var(--status-not-started-fg); }
+.planner-neutral { background: var(--status-to-release-bg); color: var(--status-to-release-fg); }
+.planner-fields {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+.planner-field { min-width: 110px; }
+.planner-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.planner-value { font-size: 16px; font-weight: 600; margin-top: 2px; }
+.planner-sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 4px; }
+.planner-delta-ahead { color: var(--status-released-fg); font-weight: 600; }
+.planner-delta-behind { color: var(--status-not-started-fg); font-weight: 600; }

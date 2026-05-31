@@ -51,6 +51,47 @@
     });
   }
 
+  function renderPlanner(p) {
+    var el = document.getElementById("planner");
+    if (!el || !p) return;
+    var badge = document.getElementById("planner-badge");
+    var phase = p.phase;
+    var status, cls;
+    if (phase === "pre-start") {
+      status = "Starts " + p.startDate + " · " + p.dailyQuota + "/day target";
+      cls = "planner-neutral";
+    } else if (phase === "complete") {
+      status = "🎉 Goal reached — " + p.releasedTotal + "/" + p.totalPackages;
+      cls = "planner-ahead";
+    } else if (phase === "past-deadline") {
+      status = "Deadline passed · " + p.releasedTotal + "/" + p.totalPackages +
+        " released · " + p.remaining + " remaining";
+      cls = "planner-behind";
+    } else {
+      var d = p.delta;
+      if (d >= 0) {
+        status = "✓ On track · " + d + " ahead";
+        cls = "planner-ahead";
+      } else {
+        status = "⚠ Behind by " + (-d) + " package(s)";
+        cls = "planner-behind";
+      }
+    }
+    badge.textContent = status;
+    badge.className = "planner-badge " + cls;
+
+    document.getElementById("planner-target-today").textContent = p.targetByToday;
+    document.getElementById("planner-actual").textContent = p.actualByToday;
+    var deltaSpan = document.getElementById("planner-delta");
+    var dlt = p.delta;
+    deltaSpan.textContent = "(" + (dlt >= 0 ? "+" : "") + dlt + " vs target)";
+    deltaSpan.className = "planner-sub " + (dlt >= 0 ? "planner-delta-ahead" : "planner-delta-behind");
+    document.getElementById("planner-week-target").textContent = p.targetThisWeekRemaining;
+    document.getElementById("planner-pace").textContent = p.requiredPaceToFinish;
+    document.getElementById("planner-deadline").textContent = p.deadline;
+    el.hidden = false;
+  }
+
   fetch("data.json", { cache: "no-cache" })
     .then(function (resp) {
       if (!resp.ok) throw new Error("HTTP " + resp.status);
@@ -83,6 +124,8 @@
         inProgressByKind.refresh + " refresh · " + inProgressByKind["self-serve"] + " self-serve";
       document.getElementById("stat-not-started").textContent = counts["Not Started"];
       document.getElementById("stats").hidden = false;
+
+      renderPlanner(payload.planner);
 
       populateFilter(document.getElementById("filter-status"), rows.map(function (r) { return r.releaseStatus; }));
       populateFilter(document.getElementById("filter-by"), rows.map(function (r) { return r.releaseBy; }));

@@ -34,7 +34,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -453,6 +453,99 @@ def build_rows(session) -> list[dict]:
 # ---------------------------------------------------------------------------
 # entry point
 # ---------------------------------------------------------------------------
+# Planner — fixed-quota burndown vs the 2026-06-30 deadline.
+# ---------------------------------------------------------------------------
+
+PLANNER_START = date(2026, 6, 1)
+PLANNER_DEADLINE = date(2026, 6, 30)
+PLANNER_HOLIDAYS = {date(2026, 6, 19)}
+PLANNER_DAILY_QUOTA = 4
+# Snapshot of Released count taken at planner start. Workflow runs are
+# stateless (nothing is committed back) so we can't auto-snapshot; bump
+# this manually if you reset the baseline.
+PLANNER_RELEASED_AT_START = 70
+
+
+def _is_working_day(d: date) -> bool:
+    return d.weekday() < 5 and d not in PLANNER_HOLIDAYS
+
+
+def _working_days_between(start: date, end_inclusive: date) -> int:
+    """Number of working days in [start, end_inclusive]. 0 if end < start."""
+    if end_inclusive < start:
+        return 0
+    n = 0
+    d = start
+    while d <= end_inclusive:
+        if _is_working_day(d):
+            n += 1
+        d += timedelta(days=1)
+    return n
+
+
+def build_planner(rows: list[dict]) -> dict | None:
+    """Burndown snapshot for the dashboard.
+
+    Hard-coded constants for now (start, deadline, holidays, daily quota).
+    "Done" = Released only. We have no historical Released-count series,
+    so `releasedAtStart` is snapshotted from today's count: every Release
+    that ships from now on counts toward the daily quota.
+    """
+    today = datetime.now(timezone.utc).date()
+    total = len(rows)
+    released_total = sum(1 for r in rows if r.get("releaseStatus") == "Released")
+    remaining = max(total - released_total, 0)
+
+    elapsed = _working_days_between(PLANNER_START, min(today, PLANNER_DEADLINE))
+    days_remaining = _working_days_between(max(today + timedelta(days=1), PLANNER_START), PLANNER_DEADLINE)
+    # "rest of this week" = today's remaining working days through Sunday
+    week_end = today + timedelta(days=(6 - today.weekday()))
+    week_left = _working_days_between(today, min(week_end, PLANNER_DEADLINE))
+
+    # Baseline snapshot — see PLANNER_RELEASED_AT_START above.
+    released_at_start = PLANNER_RELEASED_AT_START
+    target_by_today = PLANNER_DAILY_QUOTA * elapsed
+    actual_by_today = released_total - released_at_start
+    delta = actual_by_today - target_by_today
+
+    required_pace = 0
+    if remaining > 0 and days_remaining > 0:
+        required_pace = -(-remaining // days_remaining)  # ceil div
+    elif remaining > 0:
+        required_pace = remaining  # past deadline — show what's left
+
+    if today > PLANNER_DEADLINE:
+        phase = "past-deadline"
+    elif today < PLANNER_START:
+        phase = "pre-start"
+    elif remaining == 0:
+        phase = "complete"
+    else:
+        phase = "active"
+
+    return {
+        "startDate": PLANNER_START.isoformat(),
+        "deadline": PLANNER_DEADLINE.isoformat(),
+        "holidays": sorted(d.isoformat() for d in PLANNER_HOLIDAYS),
+        "dailyQuota": PLANNER_DAILY_QUOTA,
+        "today": today.isoformat(),
+        "phase": phase,
+        "totalPackages": total,
+        "releasedTotal": released_total,
+        "releasedAtStart": released_at_start,
+        "remaining": remaining,
+        "workingDaysElapsed": elapsed,
+        "workingDaysRemaining": days_remaining,
+        "workingDaysLeftThisWeek": week_left,
+        "targetByToday": target_by_today,
+        "actualByToday": actual_by_today,
+        "delta": delta,
+        "targetThisWeekRemaining": PLANNER_DAILY_QUOTA * week_left,
+        "requiredPaceToFinish": required_pace,
+    }
+
+
+# ---------------------------------------------------------------------------
 
 def main() -> None:
     if not os.environ.get("GITHUB_TOKEN"):
@@ -461,6 +554,7 @@ def main() -> None:
     rows = build_rows(session)
     payload = {
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "planner": build_planner(rows),
         "rows": rows,
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
