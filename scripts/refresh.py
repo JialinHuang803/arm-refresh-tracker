@@ -307,29 +307,28 @@ def derive_release_by(labels: list[str]) -> str:
     return ""
 
 
-def is_published_on_npm(
+def released_npm_publish_time(
     session,
     package_name: str,
     version: str,
     npm_cache: dict,
     *,
     merged_at: str | None = None,
-) -> bool:
-    """Did the TypeSpec migration actually ship to npm?
+) -> str | None:
+    """Return the ISO publish time of the npm version that satisfies the
+    Released check, or None if the TypeSpec migration hasn't shipped.
 
-    True if either:
+    Released if either:
       - the exact `version` (from package.json at the introducing commit) is
         on npm, OR
       - some non-alpha version >= `version` exists on npm and was published
-        at-or-after `merged_at` (the introducing PR's merge time).
+        at-or-after `merged_at`.
 
-    The merged_at gate exists to avoid false positives like arm-appservice,
-    whose npm registry still carries 30.0.0-beta.x from 2021 — long before
-    the 2026 migration PR. Those stale betas would otherwise satisfy the
-    >= comparison and mark every such package "Released" by accident.
+    The merged_at gate keeps stale pre-migration releases (e.g.
+    arm-appservice 30.0.0-beta.x from 2021) from being counted.
     """
     if not version:
-        return False
+        return None
     info = npm_cache.get(package_name)
     if info is None:
         info = npm_package_versions(session, package_name) or {}
@@ -337,13 +336,13 @@ def is_published_on_npm(
     versions = (info.get("versions") or {})
     times = info.get("time") or {}
     if not versions:
-        return False
+        return None
     if version in versions:
-        return True
+        return times.get(version) or ""
     try:
         target = _parse_version(version)
     except Exception:
-        return False
+        return None
     for v in versions.keys():
         if "alpha" in v.lower():
             continue
@@ -353,10 +352,16 @@ def is_published_on_npm(
             continue
         if cand < target:
             continue
-        if merged_at and (times.get(v) or "") < merged_at:
+        t = times.get(v) or ""
+        if merged_at and t < merged_at:
             continue
-        return True
-    return False
+        return t
+    return None
+
+
+def is_published_on_npm(*args, **kwargs) -> bool:
+    """Back-compat shim: True if the migration has shipped."""
+    return released_npm_publish_time(*args, **kwargs) is not None
 
 
 def _parse_version(v: str):
@@ -401,12 +406,17 @@ def build_rows(session) -> list[dict]:
         release_status = "Not Started"
         release_by = ""
 
+        released_at_npm: str | None = None
         if sdk_path and pkg and sdk_is_typespec(session, sdk_path):
             tsp_pr = find_first_tsp_pr(session, sdk_path)
             sdk_pr = tsp_pr
             version = (tsp_pr or {}).get("versionAtMerge", "")
             merged_at = (tsp_pr or {}).get("mergedAt")
-            if version and is_published_on_npm(session, pkg, version, npm_cache, merged_at=merged_at):
+            if version:
+                released_at_npm = released_npm_publish_time(
+                    session, pkg, version, npm_cache, merged_at=merged_at
+                )
+            if released_at_npm is not None:
                 release_status = "Released"
             else:
                 release_status = "To Release"
@@ -425,6 +435,7 @@ def build_rows(session) -> list[dict]:
                 sdkPr=sdk_pr,
                 releaseStatus=release_status,
                 releaseBy=release_by,
+                releasedAt=released_at_npm,
             )
         )
 
@@ -482,9 +493,27 @@ def build_planner(rows: list[dict]) -> dict | None:
 
     elapsed = _working_days_between(PLANNER_START, min(today, PLANNER_DEADLINE))
     days_remaining = _working_days_between(max(today + timedelta(days=1), PLANNER_START), PLANNER_DEADLINE)
-    # "rest of this week" = today's remaining working days through Sunday
+
+    # This week (Mon 00:00 UTC+8 → next Mon 00:00 UTC+8). week_left counts
+    # working days from today through Sunday so the "to ship by Fri" label
+    # still tracks how much working time is left.
+    monday = today - timedelta(days=today.weekday())
+    next_monday = monday + timedelta(days=7)
     week_end = today + timedelta(days=(6 - today.weekday()))
     week_left = _working_days_between(today, min(week_end, PLANNER_DEADLINE))
+    weekly_quota = PLANNER_DAILY_QUOTA * _working_days_between(monday, min(week_end, PLANNER_DEADLINE))
+
+    # Released this week = rows whose npm publish time falls in [Mon, next Mon)
+    monday_iso = f"{monday.isoformat()}T00:00:00+08:00"
+    next_monday_iso = f"{next_monday.isoformat()}T00:00:00+08:00"
+    released_this_week = sum(
+        1
+        for r in rows
+        if r.get("releaseStatus") == "Released"
+        and r.get("releasedAt")
+        and monday_iso <= _as_utc8(r["releasedAt"]) < next_monday_iso
+    )
+    target_this_week_remaining = max(0, weekly_quota - released_this_week)
 
     # Baseline snapshot — see PLANNER_RELEASED_AT_START above.
     released_at_start = PLANNER_RELEASED_AT_START
@@ -524,9 +553,24 @@ def build_planner(rows: list[dict]) -> dict | None:
         "targetByToday": target_by_today,
         "actualByToday": actual_by_today,
         "delta": delta,
-        "targetThisWeekRemaining": PLANNER_DAILY_QUOTA * week_left,
+        "weeklyQuota": weekly_quota,
+        "releasedThisWeek": released_this_week,
+        "targetThisWeekRemaining": target_this_week_remaining,
         "requiredPaceToFinish": required_pace,
     }
+
+
+def _as_utc8(iso: str) -> str:
+    """Normalize an ISO timestamp to a string that sorts correctly against a
+    UTC+8 boundary. Convert any Z/UTC time to UTC+8 wall-clock so lexical
+    comparison against `YYYY-MM-DDT00:00:00+08:00` works.
+    """
+    try:
+        dt = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    except Exception:
+        return iso
+    dt8 = dt.astimezone(timezone(timedelta(hours=8)))
+    return dt8.isoformat()
 
 
 # ---------------------------------------------------------------------------

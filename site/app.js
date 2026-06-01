@@ -82,6 +82,10 @@
 
     document.getElementById("planner-target-today").textContent = p.targetByToday;
     document.getElementById("planner-week-target").textContent = p.targetThisWeekRemaining;
+    var weekSub = document.getElementById("planner-week-sub");
+    if (weekSub && typeof p.releasedThisWeek === "number" && typeof p.weeklyQuota === "number") {
+      weekSub.textContent = "left · " + p.releasedThisWeek + "/" + p.weeklyQuota + " done";
+    }
     document.getElementById("planner-pace").textContent = p.requiredPaceToFinish;
     document.getElementById("planner-deadline").textContent = p.deadline;
     el.hidden = false;
