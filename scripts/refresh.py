@@ -60,6 +60,7 @@ SPECS_REPO = "azure-rest-api-specs"
 
 VERSIONS_ENUM_RE = re.compile(r"enum\s+Versions\s*\{([^}]+)\}", re.DOTALL)
 TITLE_PKG_RE = re.compile(r"\[AutoPR @azure-arm-([a-z0-9-]+)\]", re.IGNORECASE)
+TSP_PR_LABELS = {"first-typespec-migration", "refresh"}
 LINK_LAST_RE = re.compile(r'<[^>]*[?&]page=(\d+)[^>]*>;\s*rel="last"')
 
 
@@ -223,7 +224,9 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
 
     A single search call covers every package; we filter and group locally.
     Revert PRs are excluded — the title still mentions the package but the
-    PR does the opposite of a migration.
+    PR does the opposite of a migration. PRs that lack a TypeSpec-related
+    label (`first-typespec-migration` or `refresh`) are also dropped to
+    avoid counting unrelated regeneration PRs as in-progress migrations.
     """
     print("[prs] searching open non-draft AutoPR PRs…")
     items = search_issues(
@@ -235,6 +238,9 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
     for it in items:
         title = it.get("title", "") or ""
         if title.lstrip().lower().startswith("revert"):
+            continue
+        labels = {(lbl.get("name") or "") for lbl in it.get("labels", [])}
+        if not (labels & TSP_PR_LABELS):
             continue
         m = TITLE_PKG_RE.search(title)
         if not m:
