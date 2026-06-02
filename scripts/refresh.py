@@ -222,6 +222,8 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
     """Map packageName -> most-recently-updated open, non-draft AutoPR PR.
 
     A single search call covers every package; we filter and group locally.
+    Revert PRs are excluded — the title still mentions the package but the
+    PR does the opposite of a migration.
     """
     print("[prs] searching open non-draft AutoPR PRs…")
     items = search_issues(
@@ -231,7 +233,10 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
     print(f"[prs]   {len(items)} candidate PR(s).")
     out: dict[str, dict] = {}
     for it in items:
-        m = TITLE_PKG_RE.search(it.get("title", ""))
+        title = it.get("title", "") or ""
+        if title.lstrip().lower().startswith("revert"):
+            continue
+        m = TITLE_PKG_RE.search(title)
         if not m:
             continue
         pkg = f"@azure/arm-{m.group(1)}"
@@ -242,64 +247,20 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
     return out
 
 
-def _pr_head_sha(session, pr_number: int) -> str | None:
-    """Return the head SHA of a PR, or None if the PR can't be fetched."""
-    resp = gh_get(
-        session,
-        f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}",
-        allow_404=True,
-    )
-    if resp is None:
-        return None
-    return ((resp.json() or {}).get("head") or {}).get("sha")
-
-
-def _pr_adds_file(session, pr_number: int, file_path: str) -> bool:
-    """Return True if `file_path` is added/renamed (i.e. newly present) in this PR.
-
-    GitHub caps `/pulls/{n}/files` at 3000 files (30 pages × 100). First-typespec
-    migration PRs commonly add 1000–2500 files, so we have to walk all pages.
-    """
-    page = 1
-    while page <= 30:
-        resp = gh_get(
-            session,
-            f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}/files",
-            params={"per_page": "100", "page": page},
-            allow_404=True,
-        )
-        if resp is None:
-            return False
-        files = resp.json()
-        if not files:
-            return False
-        for f in files:
-            if f.get("filename") == file_path:
-                # We only care about "this PR introduces the file" — added/renamed.
-                # Modified means the file was already on main, which is the other
-                # branch in build_rows.
-                return f.get("status") in ("added", "renamed")
-        if len(files) < 100:
-            return False
-        page += 1
-    return False
-
-
 def find_open_tsp_pr(
     session, package_name: str, sdk_path: str, open_pr_map: dict[str, dict]
 ) -> dict | None:
+    """Return the open AutoPR (if any) introducing TypeSpec for this package.
+
+    The caller has already verified main lacks tsp-location.yaml for this
+    package, so any open AutoPR matching the package's title is treated as
+    the in-flight migration PR. We deliberately avoid inspecting the PR's
+    file list — AutoPR PRs frequently exceed the 3000-file cap on
+    /pulls/{n}/files, which made tsp-location.yaml unreachable and caused
+    in-progress packages to fall back to "Not Started".
+    """
     candidate = open_pr_map.get(package_name)
     if not candidate:
-        return None
-    file_path = f"{sdk_path}/tsp-location.yaml"
-    # AutoPR PRs regenerate everything (often >3000 files), so /pulls/{n}/files
-    # pagination can't reach tsp-location.yaml. Instead, check whether the file
-    # exists at the PR's head SHA. The caller has already verified the file is
-    # absent on main, so presence at head means the PR adds it.
-    head_sha = _pr_head_sha(session, candidate["number"])
-    if not head_sha:
-        return None
-    if not file_exists(session, SDK_OWNER, SDK_REPO, file_path, ref=head_sha):
         return None
     return {
         "number": candidate["number"],
