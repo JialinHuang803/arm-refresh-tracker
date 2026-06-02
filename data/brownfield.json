@@ -555,12 +555,6 @@
     "service": "Cluster Configuration - Extensions",
     "armNamespace": "Microsoft.KubernetesConfiguration",
     "specFolder": "kubernetesconfiguration",
-    "sdkPackageName": "@azure/arm-kubernetesconfiguration"
-  },
-  {
-    "service": "Cluster Configuration - Extensions",
-    "armNamespace": "Microsoft.KubernetesConfiguration",
-    "specFolder": "kubernetesconfiguration",
     "sdkPackageName": "@azure/arm-kubernetesconfiguration-extensions"
   },
   {
