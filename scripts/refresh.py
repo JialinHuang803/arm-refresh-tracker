@@ -242,6 +242,18 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
     return out
 
 
+def _pr_head_sha(session, pr_number: int) -> str | None:
+    """Return the head SHA of a PR, or None if the PR can't be fetched."""
+    resp = gh_get(
+        session,
+        f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}",
+        allow_404=True,
+    )
+    if resp is None:
+        return None
+    return ((resp.json() or {}).get("head") or {}).get("sha")
+
+
 def _pr_adds_file(session, pr_number: int, file_path: str) -> bool:
     """Return True if `file_path` is added/renamed (i.e. newly present) in this PR.
 
@@ -280,7 +292,14 @@ def find_open_tsp_pr(
     if not candidate:
         return None
     file_path = f"{sdk_path}/tsp-location.yaml"
-    if not _pr_adds_file(session, candidate["number"], file_path):
+    # AutoPR PRs regenerate everything (often >3000 files), so /pulls/{n}/files
+    # pagination can't reach tsp-location.yaml. Instead, check whether the file
+    # exists at the PR's head SHA. The caller has already verified the file is
+    # absent on main, so presence at head means the PR adds it.
+    head_sha = _pr_head_sha(session, candidate["number"])
+    if not head_sha:
+        return None
+    if not file_exists(session, SDK_OWNER, SDK_REPO, file_path, ref=head_sha):
         return None
     return {
         "number": candidate["number"],
