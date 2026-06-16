@@ -507,25 +507,7 @@
     "service": "Azure Kubernetes Service",
     "armNamespace": "Microsoft.ContainerService",
     "specFolder": "containerservice",
-    "sdkPackageName": "@azure/arm-containerserviceaimanager"
-  },
-  {
-    "service": "Azure Kubernetes Service",
-    "armNamespace": "Microsoft.ContainerService",
-    "specFolder": "containerservice",
     "sdkPackageName": "@azure/arm-containerservicefleet"
-  },
-  {
-    "service": "Azure Kubernetes Service",
-    "armNamespace": "Microsoft.ContainerService",
-    "specFolder": "containerservice",
-    "sdkPackageName": "@azure/arm-containerservicenodecustomization"
-  },
-  {
-    "service": "Azure Kubernetes Service",
-    "armNamespace": "Microsoft.ContainerService",
-    "specFolder": "containerservice",
-    "sdkPackageName": "@azure/arm-containerservicepreparedimagespecification"
   },
   {
     "service": "Azure Kubernetes Service",
@@ -634,12 +616,6 @@
     "armNamespace": "Microsoft.App",
     "specFolder": "app",
     "sdkPackageName": "@azure/arm-appcontainers"
-  },
-  {
-    "service": "Azure Container Apps",
-    "armNamespace": "Microsoft.App",
-    "specFolder": "app",
-    "sdkPackageName": "@azure/arm-sreagent"
   },
   {
     "service": "Application Insights",
