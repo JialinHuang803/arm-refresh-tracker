@@ -783,7 +783,7 @@
     "service": "Quartz Governance Services (Power Platform)",
     "armNamespace": "Microsoft.PowerPlatform",
     "specFolder": "powerplatform",
-    "sdkPackageName": null
+    "sdkPackageName": "@azure/arm-powerplatform"
   },
   {
     "service": "Azure Red Hat OpenShift",
