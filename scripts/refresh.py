@@ -317,6 +317,107 @@ def fetch_open_autopr_prs(session) -> dict[str, dict]:
     return out
 
 
+def fetch_batch_refresh_prs(session, index: dict) -> dict[str, list[dict]]:
+    """Find refresh-labeled PRs (open or merged) that don't use the [AutoPR] title pattern.
+
+    These are batch PRs (like "[mgmt] GA refreshed mgmt packages") that contain
+    multiple packages. We check their file lists to map packages.
+
+    Returns a dict mapping package name -> list of PR dicts (with state info).
+    """
+    # Build reverse map: sdkPath -> packageName
+    path_to_pkg: dict[str, str] = {}
+    for pkg_name, info in index.items():
+        sdk_path = info.get("sdkPath", "")
+        if sdk_path:
+            path_to_pkg[sdk_path] = pkg_name
+
+    # Search for open batch refresh PRs (non-AutoPR title)
+    print("[batch-prs] searching for batch refresh PRs…")
+    open_items = search_issues(
+        session,
+        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:open label:refresh -"[AutoPR"',
+    )
+    merged_items = search_issues(
+        session,
+        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:merged label:refresh -"[AutoPR"',
+    )
+    # Only consider recently merged batch PRs (last 90 days)
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
+    merged_items = [
+        it for it in merged_items
+        if (it.get("closed_at") or "") >= cutoff
+    ]
+    all_items = open_items + merged_items
+    print(f"[batch-prs]   {len(open_items)} open, {len(merged_items)} recently merged.")
+
+    out: dict[str, list[dict]] = {}
+    for it in all_items:
+        title = it.get("title", "") or ""
+        if title.lstrip().lower().startswith("revert"):
+            continue
+        pr_number = it["number"]
+        is_open = it.get("state", "").lower() == "open"
+
+        # Fetch file list (first 300 files)
+        resp = gh_get(
+            session,
+            f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}/files",
+            params={"per_page": "100"},
+            allow_404=True,
+        )
+        if resp is None:
+            continue
+        files = resp.json()
+        # Fetch additional pages if needed (up to 300 files)
+        for page in [2, 3]:
+            if len(files) % 100 != 0:
+                break  # Previous page wasn't full
+            resp2 = gh_get(
+                session,
+                f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}/files",
+                params={"per_page": "100", "page": str(page)},
+                allow_404=True,
+            )
+            if resp2 is None or not resp2.json():
+                break
+            files.extend(resp2.json())
+
+        # Map files to packages
+        packages_in_pr: set[str] = set()
+        for f in files:
+            fn = f.get("filename", "")
+            # Match sdk/{service}/{pkg-dir}/package.json (exactly 4 segments)
+            parts = fn.split("/")
+            if len(parts) == 4 and parts[0] == "sdk" and parts[3] == "package.json":
+                sdk_path = "/".join(parts[:3])
+                pkg_name = path_to_pkg.get(sdk_path)
+                if pkg_name:
+                    packages_in_pr.add(pkg_name)
+
+        if not packages_in_pr:
+            continue
+
+        pr_info = {
+            "number": pr_number,
+            "url": it.get("html_url", ""),
+            "title": title,
+            "state": "open" if is_open else "merged",
+            "merged": not is_open,
+            "mergedAt": (it.get("pull_request", {}).get("merged_at")
+                         or it.get("closed_at")) if not is_open else None,
+            "updatedAt": it.get("updated_at"),
+        }
+
+        print(f"[batch-prs]   PR #{pr_number} ({pr_info['state']}): {len(packages_in_pr)} packages")
+        for pkg_name in packages_in_pr:
+            out.setdefault(pkg_name, []).append(pr_info)
+
+    total_pkgs = len(out)
+    print(f"[batch-prs]   mapped to {total_pkgs} package(s) total.")
+    return out
+
+
 def find_open_tsp_pr(
     session, package_name: str, sdk_path: str, open_pr_map: dict[str, dict]
 ) -> dict | None:
@@ -441,6 +542,7 @@ def build_rows(session) -> list[dict]:
     index = json.loads(INDEX.read_text(encoding="utf-8"))
 
     open_pr_map = fetch_open_autopr_prs(session)
+    batch_pr_map = fetch_batch_refresh_prs(session, index)
 
     npm_cache: dict[str, dict] = {}
     results: list[dict] = []
@@ -526,20 +628,56 @@ def build_rows(session) -> list[dict]:
                                 stable_version = sorted(newer_stable, key=Version)[-1]
                                 stable_release_status = "Released"
 
-                    # If still no stable found, check for open PR
+                    # If still no stable found, check for batch PRs and open PRs
                     if not stable_release_status:
-                        open_stable = open_pr_map.get(pkg)
-                        if open_stable and open_stable.get("number") != beta_pr_number:
+                        # Check batch refresh PRs (both merged and open)
+                        batch_prs = batch_pr_map.get(pkg, [])
+                        merged_batch = [
+                            p for p in batch_prs
+                            if p.get("merged") and p.get("number") != beta_pr_number
+                        ]
+                        open_batch = [
+                            p for p in batch_prs
+                            if not p.get("merged") and p.get("number") != beta_pr_number
+                        ]
+
+                        if merged_batch:
+                            # A merged batch PR exists — treat as stable PR
+                            bp = merged_batch[0]
+                            stable_pr = {
+                                "number": bp["number"],
+                                "url": bp.get("url", ""),
+                                "title": bp.get("title", ""),
+                                "mergedAt": bp.get("mergedAt"),
+                                "versionAtMerge": "",
+                            }
+                            # Try to get version from npm
+                            stable_release_status = "To Release"
+                        elif open_batch:
+                            # An open batch PR includes this package
+                            bp = open_batch[0]
                             stable_release_status = "In Progress"
                             stable_pr = {
-                                "number": open_stable["number"],
-                                "url": open_stable.get("html_url", ""),
-                                "title": open_stable.get("title", ""),
+                                "number": bp["number"],
+                                "url": bp.get("url", ""),
+                                "title": bp.get("title", ""),
                                 "mergedAt": None,
                                 "versionAtMerge": "",
                             }
                         else:
-                            stable_release_status = "Not Started"
+                            # Also check single-package open PRs
+                            open_stable = open_pr_map.get(pkg)
+                            if open_stable and open_stable.get("number") != beta_pr_number:
+                                stable_release_status = "In Progress"
+                                stable_pr = {
+                                    "number": open_stable["number"],
+                                    "url": open_stable.get("html_url", ""),
+                                    "title": open_stable.get("title", ""),
+                                    "mergedAt": None,
+                                    "versionAtMerge": "",
+                                }
+                            else:
+                                stable_release_status = "Not Started"
         elif sdk_path and pkg:
             open_pr = find_open_tsp_pr(session, pkg, sdk_path, open_pr_map)
             if open_pr is not None:
