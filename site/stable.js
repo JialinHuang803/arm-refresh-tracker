@@ -39,9 +39,13 @@
     return version && version.indexOf("beta") !== -1;
   }
 
-  function isStableApi(specsApiVersion) {
-    if (!specsApiVersion) return false;
-    return specsApiVersion.indexOf("preview") === -1;
+  function isStableApi(sdkApiVersions) {
+    if (!sdkApiVersions || typeof sdkApiVersions !== "object") return false;
+    var values = Object.values(sdkApiVersions);
+    if (values.length === 0) return false;
+    return values.every(function (v) {
+      return String(v).indexOf("preview") === -1;
+    });
   }
 
   function formatApiVersions(row) {
@@ -59,9 +63,9 @@
       document.getElementById("lastUpdated").textContent =
         "Last refreshed: " + formatTimestamp(payload.generatedAt);
 
-      // Filter: beta SDK version + stable API version + released + releaseBy=refresh
+      // Filter: beta SDK version + stable API versions (from metadata.json at merge) + released + releaseBy=refresh
       var candidates = rows.filter(function (r) {
-        return isBeta(r.sdkVersion) && isStableApi(r.specsApiVersion) && r.releaseStatus === "Released" && r.releaseBy === "refresh";
+        return isBeta(r.sdkVersion) && isStableApi(r.sdkApiVersions) && r.releaseStatus === "Released" && r.releaseBy === "refresh";
       });
 
       document.getElementById("rowCount").textContent = candidates.length + " packages";
@@ -87,9 +91,12 @@
             },
           },
           {
-            data: "specsApiVersion",
+            data: "sdkApiVersions",
             title: "API Version",
-            render: plain,
+            render: function (data, type) {
+              if (!data || typeof data !== "object") return "";
+              return Object.values(data).join(", ");
+            },
           },
           {
             data: "sdkPr",

@@ -192,6 +192,18 @@ def _version_at_commit(session, sdk_path: str, sha: str) -> str:
         return ""
 
 
+def _api_versions_at_commit(session, sdk_path: str, sha: str) -> dict:
+    """Read apiVersions from metadata.json at the given commit."""
+    text = get_raw_file(session, SDK_OWNER, SDK_REPO, f"{sdk_path}/metadata.json", ref=sha)
+    if not text:
+        return {}
+    try:
+        meta = json.loads(text)
+        return meta.get("apiVersions") or meta.get("apiVersion") or {}
+    except json.JSONDecodeError:
+        return {}
+
+
 def find_first_tsp_pr(session, sdk_path: str) -> dict | None:
     """Find the PR that first added sdk/<path>/tsp-location.yaml on main."""
     file_path = f"{sdk_path}/tsp-location.yaml"
@@ -212,6 +224,7 @@ def find_first_tsp_pr(session, sdk_path: str) -> dict | None:
         "labels": [lbl.get("name", "") for lbl in pr.get("labels", [])],
         "introducingSha": sha,
         "versionAtMerge": _version_at_commit(session, sdk_path, sha),
+        "apiVersionsAtMerge": _api_versions_at_commit(session, sdk_path, sha),
     }
 
 
@@ -394,11 +407,13 @@ def build_rows(session) -> list[dict]:
 
         released_at_npm: str | None = None
         sdk_version: str = ""
+        sdk_api_versions: dict = {}
         if sdk_path and pkg and sdk_is_typespec(session, sdk_path):
             tsp_pr = find_first_tsp_pr(session, sdk_path)
             sdk_pr = tsp_pr
             version = (tsp_pr or {}).get("versionAtMerge", "")
             sdk_version = version
+            sdk_api_versions = (tsp_pr or {}).get("apiVersionsAtMerge", {})
             merged_at = (tsp_pr or {}).get("mergedAt")
             if version:
                 released_at_npm = released_npm_publish_time(
@@ -421,6 +436,7 @@ def build_rows(session) -> list[dict]:
                 row,
                 specsApiVersion=specs_ver,
                 sdkVersion=sdk_version,
+                sdkApiVersions=sdk_api_versions,
                 sdkPr=sdk_pr,
                 releaseStatus=release_status,
                 releaseBy=release_by,
