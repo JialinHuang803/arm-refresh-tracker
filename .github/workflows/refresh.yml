@@ -76,7 +76,7 @@ jobs:
       - name: Stamp asset version for cache busting
         run: |
           sha="${GITHUB_SHA::8}"
-          sed -i "s/__ASSET_VERSION__/${sha}/g" site/index.html
+          sed -i "s/__ASSET_VERSION__/${sha}/g" site/index.html site/stable.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
