@@ -288,23 +288,48 @@ def update_stable_status(session, rows: list[dict], index: dict) -> list[dict]:
 
                 if merged_batch:
                     bp = merged_batch[0]
+                    # Fetch full PR details to get merge commit SHA
+                    pr_resp = gh_get(
+                        session,
+                        f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{bp['number']}",
+                        allow_404=True,
+                    )
+                    merge_sha = ""
+                    if pr_resp:
+                        merge_sha = pr_resp.json().get("merge_commit_sha", "")
+                    version = _version_at_commit(session, sdk_path, merge_sha) if merge_sha else ""
                     stable_pr = {
                         "number": bp["number"],
                         "url": bp.get("url", ""),
                         "title": bp.get("title", ""),
                         "mergedAt": bp.get("mergedAt"),
-                        "versionAtMerge": "",
+                        "versionAtMerge": version,
                     }
-                    stable_release_status = "To Release"
+                    stable_version = version
+                    if stable_version and released_on_npm(session, pkg, stable_version, npm_cache):
+                        stable_release_status = "Released"
+                    else:
+                        stable_release_status = "To Release"
                 elif open_batch:
                     bp = open_batch[0]
+                    # Read version from PR head branch
+                    pr_resp = gh_get(
+                        session,
+                        f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{bp['number']}",
+                        allow_404=True,
+                    )
+                    head_sha = ""
+                    if pr_resp:
+                        head_sha = pr_resp.json().get("head", {}).get("sha", "")
+                    version = _version_at_commit(session, sdk_path, head_sha) if head_sha else ""
                     stable_release_status = "In Progress"
+                    stable_version = version
                     stable_pr = {
                         "number": bp["number"],
                         "url": bp.get("url", ""),
                         "title": bp.get("title", ""),
                         "mergedAt": None,
-                        "versionAtMerge": "",
+                        "versionAtMerge": version,
                     }
                 else:
                     # 4. Check single-package open PRs

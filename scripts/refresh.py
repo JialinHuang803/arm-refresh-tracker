@@ -648,27 +648,56 @@ def build_rows(session) -> list[dict]:
                         ]
 
                         if merged_batch:
-                            # A merged batch PR exists — treat as stable PR
+                            # A merged batch PR exists — fetch version from merge commit
                             bp = merged_batch[0]
+                            pr_resp = gh_get(
+                                session,
+                                f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{bp['number']}",
+                                allow_404=True,
+                            )
+                            merge_sha = ""
+                            if pr_resp:
+                                merge_sha = pr_resp.json().get("merge_commit_sha", "")
+                            version = _version_at_commit(session, sdk_path, merge_sha) if merge_sha else ""
                             stable_pr = {
                                 "number": bp["number"],
                                 "url": bp.get("url", ""),
                                 "title": bp.get("title", ""),
                                 "mergedAt": bp.get("mergedAt"),
-                                "versionAtMerge": "",
+                                "versionAtMerge": version,
                             }
-                            # Try to get version from npm
-                            stable_release_status = "To Release"
+                            stable_version = version
+                            if stable_version:
+                                stable_released_at = released_npm_publish_time(
+                                    session, pkg, stable_version, npm_cache,
+                                    merged_at=bp.get("mergedAt"),
+                                )
+                                if stable_released_at is not None:
+                                    stable_release_status = "Released"
+                                else:
+                                    stable_release_status = "To Release"
+                            else:
+                                stable_release_status = "To Release"
                         elif open_batch:
-                            # An open batch PR includes this package
+                            # An open batch PR — read version from PR head branch
                             bp = open_batch[0]
+                            pr_resp = gh_get(
+                                session,
+                                f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{bp['number']}",
+                                allow_404=True,
+                            )
+                            head_sha = ""
+                            if pr_resp:
+                                head_sha = pr_resp.json().get("head", {}).get("sha", "")
+                            version = _version_at_commit(session, sdk_path, head_sha) if head_sha else ""
                             stable_release_status = "In Progress"
+                            stable_version = version
                             stable_pr = {
                                 "number": bp["number"],
                                 "url": bp.get("url", ""),
                                 "title": bp.get("title", ""),
                                 "mergedAt": None,
-                                "versionAtMerge": "",
+                                "versionAtMerge": version,
                             }
                         else:
                             # Also check single-package open PRs

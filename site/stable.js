@@ -125,10 +125,11 @@
           {
             data: "stableVersion",
             title: "SDK Version (stable)",
-            render: function (data, type) {
+            render: function (data, type, row) {
               if (!data) return "";
               if (type === "display") {
-                return '<span class="badge badge-Released">' + data + "</span>";
+                var cls = row.stableReleaseStatus === "Released" ? "badge-Released" : "badge-beta";
+                return '<span class="badge ' + cls + '">' + data + "</span>";
               }
               return data;
             },
