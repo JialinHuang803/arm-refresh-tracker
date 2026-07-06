@@ -19,6 +19,10 @@ on:
         description: "Force rebuild package-index.json (ignores cache)"
         required: false
         default: "false"
+      full_refresh:
+        description: "Run the full refresh (not just stable status)"
+        required: false
+        default: "false"
 
 # Pages requires these.
 permissions:
@@ -68,10 +72,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/build_index.py
 
-      - name: Refresh dashboard data
+      - name: Full refresh (push/manual)
+        if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.full_refresh == 'true') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/refresh.py
+
+      - name: Refresh stable status only (scheduled)
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.full_refresh != 'true') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/refresh_stable.py
 
       - name: Stamp asset version for cache busting
         run: |

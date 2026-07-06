@@ -91,7 +91,7 @@
     el.hidden = false;
   }
 
-  fetch("data.json", { cache: "no-cache" })
+  fetch("data-main.json", { cache: "no-cache" })
     .then(function (resp) {
       if (!resp.ok) throw new Error("HTTP " + resp.status);
       return resp.json();

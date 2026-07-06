@@ -136,6 +136,7 @@
           {
             data: "stablePr",
             title: "SDK PR (stable)",
+            className: "dt-body-left dt-head-left",
             render: function (data, type) {
               if (type === "display") return prLink(data);
               return data ? data.number : "";
