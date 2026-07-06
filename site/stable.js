@@ -82,10 +82,19 @@
         data: candidates,
         deferRender: true,
         pageLength: 50,
-        order: [[0, "asc"]],
+        order: [[2, "asc"]],
         columns: [
           { data: "service", title: "Service", render: plain },
           { data: "sdkPackageName", title: "SDK Package Name", render: plain },
+          {
+            data: "releasedAt",
+            title: "Last Release Date",
+            render: function (data, type) {
+              if (!data) return "";
+              if (type === "sort" || type === "type") return data;
+              return data.substring(0, 10);
+            },
+          },
           {
             data: "sdkVersion",
             title: "SDK Version (beta)",
