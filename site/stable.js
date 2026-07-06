@@ -5,6 +5,12 @@
     return value == null ? "" : String(value);
   }
 
+  function statusBadge(value) {
+    if (!value) return "";
+    var className = "badge-" + value.replace(/\s+/g, "-");
+    return '<span class="badge ' + className + '">' + value + "</span>";
+  }
+
   function prLink(pr) {
     if (!pr) return "";
     return '<a href="' + pr.url + '" target="_blank" rel="noopener">#' + pr.number + "</a>";
@@ -123,6 +129,14 @@
             render: function (data, type) {
               if (type === "display") return prLink(data);
               return data ? data.number : "";
+            },
+          },
+          {
+            data: "stableReleaseStatus",
+            title: "Stable Release Status",
+            render: function (data, type) {
+              if (type === "display") return statusBadge(data);
+              return data || "";
             },
           },
         ],

@@ -454,6 +454,7 @@ def build_rows(session) -> list[dict]:
         sdk_api_versions: dict = {}
         stable_pr: dict | None = None
         stable_version: str = ""
+        stable_release_status: str = ""
         if sdk_path and pkg and sdk_is_typespec(session, sdk_path):
             tsp_pr = find_first_tsp_pr(session, sdk_path)
             sdk_pr = tsp_pr
@@ -477,6 +478,32 @@ def build_rows(session) -> list[dict]:
                 stable_pr = find_stable_pr(session, sdk_path, beta_pr_number)
                 if stable_pr:
                     stable_version = stable_pr.get("versionAtMerge", "")
+                    # Check if stable version is published on npm
+                    if stable_version:
+                        stable_released_at = released_npm_publish_time(
+                            session, pkg, stable_version, npm_cache,
+                            merged_at=stable_pr.get("mergedAt"),
+                        )
+                        if stable_released_at is not None:
+                            stable_release_status = "Released"
+                        else:
+                            stable_release_status = "To Release"
+                    else:
+                        stable_release_status = "To Release"
+                else:
+                    # Check if there's an open PR with refresh label for this package
+                    open_stable = open_pr_map.get(pkg)
+                    if open_stable and open_stable.get("number") != beta_pr_number:
+                        stable_release_status = "In Progress"
+                        stable_pr = {
+                            "number": open_stable["number"],
+                            "url": open_stable.get("html_url", ""),
+                            "title": open_stable.get("title", ""),
+                            "mergedAt": None,
+                            "versionAtMerge": "",
+                        }
+                    else:
+                        stable_release_status = "Not Started"
         elif sdk_path and pkg:
             open_pr = find_open_tsp_pr(session, pkg, sdk_path, open_pr_map)
             if open_pr is not None:
@@ -493,6 +520,7 @@ def build_rows(session) -> list[dict]:
                 sdkPr=sdk_pr,
                 stableVersion=stable_version,
                 stablePr=stable_pr,
+                stableReleaseStatus=stable_release_status,
                 releaseStatus=release_status,
                 releaseBy=release_by,
                 releasedAt=released_at_npm,
