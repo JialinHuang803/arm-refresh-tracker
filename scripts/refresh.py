@@ -37,6 +37,8 @@ import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from packaging.version import Version
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from lib.github_api import (  # noqa: E402
@@ -496,19 +498,48 @@ def build_rows(session) -> list[dict]:
                     else:
                         stable_release_status = "To Release"
                 else:
-                    # Check if there's an open PR with refresh label for this package
-                    open_stable = open_pr_map.get(pkg)
-                    if open_stable and open_stable.get("number") != beta_pr_number:
-                        stable_release_status = "In Progress"
-                        stable_pr = {
-                            "number": open_stable["number"],
-                            "url": open_stable.get("html_url", ""),
-                            "title": open_stable.get("title", ""),
-                            "mergedAt": None,
-                            "versionAtMerge": "",
-                        }
-                    else:
-                        stable_release_status = "Not Started"
+                    # No stable PR found — check if a stable version exists on npm
+                    # (may have been released without a 'refresh' label)
+                    info = npm_cache.get(pkg)
+                    if info is None:
+                        info = npm_package_versions(session, pkg)
+                        npm_cache[pkg] = info
+                    if info:
+                        try:
+                            beta_ver = Version(sdk_version)
+                        except Exception:
+                            beta_ver = None
+                        if beta_ver:
+                            stable_versions = [
+                                v for v in (info.get("versions") or {}).keys()
+                                if "beta" not in v and "alpha" not in v
+                            ]
+                            newer_stable = []
+                            for v in stable_versions:
+                                try:
+                                    if Version(v) > beta_ver:
+                                        newer_stable.append(v)
+                                except Exception:
+                                    pass
+                            if newer_stable:
+                                # Already has a stable release newer than beta
+                                stable_version = sorted(newer_stable, key=Version)[-1]
+                                stable_release_status = "Released"
+
+                    # If still no stable found, check for open PR
+                    if not stable_release_status:
+                        open_stable = open_pr_map.get(pkg)
+                        if open_stable and open_stable.get("number") != beta_pr_number:
+                            stable_release_status = "In Progress"
+                            stable_pr = {
+                                "number": open_stable["number"],
+                                "url": open_stable.get("html_url", ""),
+                                "title": open_stable.get("title", ""),
+                                "mergedAt": None,
+                                "versionAtMerge": "",
+                            }
+                        else:
+                            stable_release_status = "Not Started"
         elif sdk_path and pkg:
             open_pr = find_open_tsp_pr(session, pkg, sdk_path, open_pr_map)
             if open_pr is not None:
