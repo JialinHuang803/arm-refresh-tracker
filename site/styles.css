@@ -120,6 +120,7 @@ a:hover { text-decoration: underline; }
 .badge-In-Progress { background: var(--status-in-progress-bg); color: var(--status-in-progress-fg); }
 .badge-To-Release { background: var(--status-to-release-bg); color: var(--status-to-release-fg); }
 .badge-Not-Started { background: var(--status-not-started-bg); color: var(--status-not-started-fg); }
+.badge-beta { background: #fff8c5; color: #7a5b00; }
 
 .tag-refresh { background: var(--by-refresh-bg); color: var(--by-refresh-fg); }
 .tag-self-serve { background: var(--by-self-serve-bg); color: var(--by-self-serve-fg); }

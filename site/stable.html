@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stable Release Candidates – ARM SDK Refresh Tracker</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="styles.css?v=__ASSET_VERSION__" />
+  </head>
+  <body>
+    <header>
+      <div class="header-cols">
+        <div class="header-main">
+          <h1>Stable Release Candidates</h1>
+          <p class="sub">Packages with stable API versions still on beta SDK versions — ready for stable release.</p>
+          <p class="meta">
+            <span id="lastUpdated">Loading…</span>
+            ·
+            <span id="rowCount"></span>
+            ·
+            <a href="index.html">← Back to main tracker</a>
+            ·
+            <a href="https://github.com/JialinHuang803/arm-refresh-tracker">source</a>
+          </p>
+          <div id="stats" class="stats" hidden>
+            <div class="stat stat-headline">
+              <div class="stat-value"><span id="stat-candidates">0</span></div>
+              <div class="stat-label">Packages should release stable</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <table id="grid" class="display compact" style="width:100%">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>SDK Package Name</th>
+            <th>SDK Version</th>
+            <th>API Versions</th>
+            <th>SDK PR</th>
+            <th>Release By</th>
+          </tr>
+        </thead>
+      </table>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script src="stable.js?v=__ASSET_VERSION__"></script>
+  </body>
+</html>

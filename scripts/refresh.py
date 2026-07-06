@@ -393,10 +393,12 @@ def build_rows(session) -> list[dict]:
         release_by = ""
 
         released_at_npm: str | None = None
+        sdk_version: str = ""
         if sdk_path and pkg and sdk_is_typespec(session, sdk_path):
             tsp_pr = find_first_tsp_pr(session, sdk_path)
             sdk_pr = tsp_pr
             version = (tsp_pr or {}).get("versionAtMerge", "")
+            sdk_version = version
             merged_at = (tsp_pr or {}).get("mergedAt")
             if version:
                 released_at_npm = released_npm_publish_time(
@@ -418,6 +420,7 @@ def build_rows(session) -> list[dict]:
             _row_from_brownfield(
                 row,
                 specsApiVersion=specs_ver,
+                sdkVersion=sdk_version,
                 sdkPr=sdk_pr,
                 releaseStatus=release_status,
                 releaseBy=release_by,
