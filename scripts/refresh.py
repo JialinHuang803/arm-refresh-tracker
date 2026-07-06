@@ -247,6 +247,11 @@ def find_stable_pr(session, sdk_path: str, beta_pr_number: int | None) -> dict |
     for it in items:
         if it.get("number") == beta_pr_number:
             continue
+        # Verify the title matches exactly this package (GitHub search can return partial matches)
+        title = it.get("title", "") or ""
+        m = TITLE_PKG_RE.search(title)
+        if not m or f"arm-{m.group(1)}" != short_name:
+            continue
         # This is a different PR with the 'refresh' label -> stable candidate
         pr_number = it["number"]
         # Fetch full PR details to get merge commit
