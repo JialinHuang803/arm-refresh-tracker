@@ -332,21 +332,27 @@ def fetch_batch_refresh_prs(session, index: dict) -> dict[str, list[dict]]:
         if sdk_path:
             path_to_pkg[sdk_path] = pkg_name
 
-    # Search for open batch refresh PRs (non-AutoPR title)
+    # Search for open batch refresh PRs (filter out AutoPR locally)
     print("[batch-prs] searching for batch refresh PRs…")
     open_items = search_issues(
         session,
-        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:open label:refresh -"[AutoPR"',
+        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:open label:refresh',
     )
+    # Filter out AutoPR-titled PRs locally
+    open_items = [
+        it for it in open_items
+        if "[AutoPR" not in (it.get("title") or "")
+    ]
+    # Search merged refresh PRs only from last 90 days to limit results
+    cutoff_date = (date.today() - timedelta(days=90)).isoformat()
     merged_items = search_issues(
         session,
-        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:merged label:refresh -"[AutoPR"',
+        query=f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:merged label:refresh merged:>{cutoff_date}',
     )
-    # Only consider recently merged batch PRs (last 90 days)
-    cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
+    # Filter out AutoPR-titled PRs locally
     merged_items = [
         it for it in merged_items
-        if (it.get("closed_at") or "") >= cutoff
+        if "[AutoPR" not in (it.get("title") or "")
     ]
     all_items = open_items + merged_items
     print(f"[batch-prs]   {len(open_items)} open, {len(merged_items)} recently merged.")
