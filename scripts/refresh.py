@@ -228,6 +228,50 @@ def find_first_tsp_pr(session, sdk_path: str) -> dict | None:
     }
 
 
+def find_stable_pr(session, sdk_path: str, beta_pr_number: int | None) -> dict | None:
+    """Find a merged PR with the 'refresh' label for the same package, different from the beta PR.
+
+    Searches for merged PRs that modified the package.json in the sdk_path
+    and have the 'refresh' label. Returns the one that is NOT the beta PR.
+    """
+    short_name = sdk_path.split("/")[-1]  # e.g. arm-automation
+    query = (
+        f'repo:{SDK_OWNER}/{SDK_REPO} is:pr is:merged label:refresh '
+        f'in:title "[AutoPR @azure-{short_name}]"'
+    )
+    items = search_issues(session, query=query)
+    if not items:
+        return None
+
+    # Filter out the beta PR and find the stable one
+    for it in items:
+        if it.get("number") == beta_pr_number:
+            continue
+        # This is a different PR with the 'refresh' label -> stable candidate
+        pr_number = it["number"]
+        # Fetch full PR details to get merge commit
+        resp = gh_get(
+            session,
+            f"/repos/{SDK_OWNER}/{SDK_REPO}/pulls/{pr_number}",
+            allow_404=True,
+        )
+        if resp is None:
+            continue
+        pr = resp.json()
+        if not pr.get("merged_at"):
+            continue
+        merge_sha = pr.get("merge_commit_sha", "")
+        version = _version_at_commit(session, sdk_path, merge_sha) if merge_sha else ""
+        return {
+            "number": pr_number,
+            "url": pr.get("html_url", ""),
+            "title": pr.get("title", ""),
+            "mergedAt": pr.get("merged_at"),
+            "versionAtMerge": version,
+        }
+    return None
+
+
 # ---------------------------------------------------------------------------
 # open AutoPR PRs (one batched search, then per-package verification)
 # ---------------------------------------------------------------------------
@@ -408,6 +452,8 @@ def build_rows(session) -> list[dict]:
         released_at_npm: str | None = None
         sdk_version: str = ""
         sdk_api_versions: dict = {}
+        stable_pr: dict | None = None
+        stable_version: str = ""
         if sdk_path and pkg and sdk_is_typespec(session, sdk_path):
             tsp_pr = find_first_tsp_pr(session, sdk_path)
             sdk_pr = tsp_pr
@@ -424,6 +470,13 @@ def build_rows(session) -> list[dict]:
             else:
                 release_status = "To Release"
             release_by = derive_release_by((tsp_pr or {}).get("labels", []))
+
+            # Look for a stable release PR (different from the beta PR)
+            if release_by == "refresh" and "beta" in sdk_version:
+                beta_pr_number = (tsp_pr or {}).get("number")
+                stable_pr = find_stable_pr(session, sdk_path, beta_pr_number)
+                if stable_pr:
+                    stable_version = stable_pr.get("versionAtMerge", "")
         elif sdk_path and pkg:
             open_pr = find_open_tsp_pr(session, pkg, sdk_path, open_pr_map)
             if open_pr is not None:
@@ -438,6 +491,8 @@ def build_rows(session) -> list[dict]:
                 sdkVersion=sdk_version,
                 sdkApiVersions=sdk_api_versions,
                 sdkPr=sdk_pr,
+                stableVersion=stable_version,
+                stablePr=stable_pr,
                 releaseStatus=release_status,
                 releaseBy=release_by,
                 releasedAt=released_at_npm,

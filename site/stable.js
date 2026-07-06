@@ -82,7 +82,7 @@
           { data: "sdkPackageName", title: "SDK Package Name", render: plain },
           {
             data: "sdkVersion",
-            title: "SDK Version",
+            title: "SDK Version (beta)",
             render: function (data, type) {
               if (type === "display" && isBeta(data)) {
                 return '<span class="badge badge-beta">' + data + "</span>";
@@ -100,7 +100,26 @@
           },
           {
             data: "sdkPr",
-            title: "SDK PR",
+            title: "SDK PR (beta)",
+            render: function (data, type) {
+              if (type === "display") return prLink(data);
+              return data ? data.number : "";
+            },
+          },
+          {
+            data: "stableVersion",
+            title: "SDK Version (stable)",
+            render: function (data, type) {
+              if (!data) return "";
+              if (type === "display") {
+                return '<span class="badge badge-Released">' + data + "</span>";
+              }
+              return data;
+            },
+          },
+          {
+            data: "stablePr",
+            title: "SDK PR (stable)",
             render: function (data, type) {
               if (type === "display") return prLink(data);
               return data ? data.number : "";
