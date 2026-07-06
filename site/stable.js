@@ -59,9 +59,9 @@
       document.getElementById("lastUpdated").textContent =
         "Last refreshed: " + formatTimestamp(payload.generatedAt);
 
-      // Filter: beta SDK version + stable API version + released status
+      // Filter: beta SDK version + stable API version + released + releaseBy=refresh
       var candidates = rows.filter(function (r) {
-        return isBeta(r.sdkVersion) && isStableApi(r.specsApiVersion) && r.releaseStatus === "Released";
+        return isBeta(r.sdkVersion) && isStableApi(r.specsApiVersion) && r.releaseStatus === "Released" && r.releaseBy === "refresh";
       });
 
       document.getElementById("rowCount").textContent = candidates.length + " packages";
@@ -97,14 +97,6 @@
             render: function (data, type) {
               if (type === "display") return prLink(data);
               return data ? data.number : "";
-            },
-          },
-          {
-            data: "releaseBy",
-            title: "Release By",
-            render: function (data, type) {
-              if (type === "display") return releaseByBadge(data);
-              return data || "";
             },
           },
         ],
